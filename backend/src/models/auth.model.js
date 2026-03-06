@@ -3,7 +3,7 @@ import db from "../config/db.js";
 export const createUser = async ({mail, password, username}) => {
   try {
     await db.query(
-      "INSERT INTO users (email, password, username) VALUES (?, ?, ?)",
+      "INSERT INTO users (email, password, username, role) VALUES (?, ?, ?, 'membre')",
       [mail, password, username],
     );
   } catch (error){

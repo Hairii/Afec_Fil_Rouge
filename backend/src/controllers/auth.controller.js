@@ -6,7 +6,6 @@ import { registerSchema } from "../validations/auth.validation.js";
 
 //register user
 export const register = async (req, res) => {
-    console.log('register appelé')
   try {
     const { mail, password, username } = req.body;
     const { error } = registerSchema.validate(req.body); // reagarde si le schema de Joi est bon
@@ -45,6 +44,7 @@ export const login = async (req, res) => {
         id: user.id,
         mail: user.mail,
         username: user.username,
+        role: user.role,
       },
       process.env.JWT_SECRET,
       {
