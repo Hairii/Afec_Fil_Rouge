@@ -4,8 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import helmet from 'helmet';
 
-
-
+import gameRoutes from './routes/game.routes.js';
 import authRoutes from './routes/auth.routes.js';
 
 
@@ -18,6 +17,6 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(helmet());
 
-
+app.use('/api/games', gameRoutes);
 app.use('/api/auth', authRoutes);
 export default app;
