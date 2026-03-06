@@ -1,12 +1,13 @@
 import mysql2 from 'mysql2/promise';
-import dotenc from 'dotenv';
+import dotenv from 'dotenv';
 
-configDotenv.config();
+
+dotenv.config();
 
 let db;
 
 try{
-    db =  await mysql2.createConnection({
+    db =  await mysql2.createPool({
         host:process.env.DB_HOST,
         user:process.env.DB_USER,
         password:process.env.DB_PASSWORD,
@@ -17,11 +18,11 @@ try{
         queueLimit:0,
     });
 
-    const connexion = await db.getconnection();
+    const connexion = await db.getConnection();
     console.log("Connexion à la base réussie");
     connexion.release();
-}catch(e){
-    console.error('Erreur connexion',error.mesage);
+}catch(error){
+    console.error('Erreur connexion',error.message);
     process.exit(1);
 }
 
