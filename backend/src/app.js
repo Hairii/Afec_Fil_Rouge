@@ -9,6 +9,7 @@ import authRoutes from './routes/auth.routes.js';
 import genreRoutes from './routes/genre.routes.js';
 
 
+
 dotenv.config();
 
 const app = express();
