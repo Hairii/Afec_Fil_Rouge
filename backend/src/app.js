@@ -6,6 +6,7 @@ import helmet from 'helmet';
 
 import gameRoutes from './routes/game.routes.js';
 import authRoutes from './routes/auth.routes.js';
+import genreRoutes from './routes/genre.routes.js';
 
 
 dotenv.config();
@@ -19,4 +20,5 @@ app.use(helmet());
 
 app.use('/api/games', gameRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/genres', genreRoutes )
 export default app;

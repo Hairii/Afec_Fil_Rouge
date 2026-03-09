@@ -11,6 +11,7 @@ export const getAllGames = async (req, res) => {
     }
 }
 
+//recuper un seul jeu
 export const getOneGame = async (req, res) => {
     try{
         const game = await getGameById(req.params.id);
