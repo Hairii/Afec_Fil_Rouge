@@ -44,6 +44,6 @@ export const getCommentByGame = async (req, res) => {
         res.json(comments);
     }catch(error){
         console.error(error);
-        res.status(500).json({message: 'erreur server (getCommentsByGame'});
+        res.status(500).json({message: 'erreur server (getCommentsByGame)'});
     }   
 }
