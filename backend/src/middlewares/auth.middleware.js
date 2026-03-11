@@ -18,7 +18,7 @@ export const verifyToken = (req, res, next) => {
 export const isAdmin = (req, res, next) => {
     const {role} = req.user;
    if (role !== 'admin') {
-        return res.status(401).json({message: "vous n'avez pas les droits"});
+        return res.status(403).json({message: "vous n'avez pas les droits"});
     }
     next();
 }
