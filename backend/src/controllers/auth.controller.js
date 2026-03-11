@@ -51,7 +51,7 @@ export const login = async (req, res) => {
         expiresIn: "1h",
       },
     );
-    //stock le tonken dasn un cookies securisé
+    //stock le token dasn un cookies securisé
     res.cookie('token', token, {
         httpOnly: true,
         sameSite: 'strict',
