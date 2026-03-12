@@ -30,6 +30,7 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { mail, password } = req.body;
+    const {error} = logingSchema.validate(req.body);// reagarde si le schema de Joi est bon
     const user = await getUserByMail(mail);
     if (!user) {
       return res.status(400).json({ message: "identifiant invalide" });

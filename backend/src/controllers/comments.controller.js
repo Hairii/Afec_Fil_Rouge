@@ -13,7 +13,8 @@ export const getAllComments = async (req, res) => {
 //mannque le schema de Joi pour eviter injection sql
 export const addComments  = async (req, res) => {
     try{
-        const {content, userID, gameID} = req.body;
+        const {content, gameID} = req.body;
+        const userID = req.user.id; // recuperer par le token
         await createComments({content, userID, gameID});
         res.status(201).json ({message: "commentaire créer"});
     }catch(error){

@@ -9,7 +9,10 @@ import authRoutes from './routes/auth.routes.js';
 import genreRoutes from './routes/genre.routes.js';
 import commentsRoutes from './routes/comments.routes.js';
 
-
+app.use(cors({
+  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  credentials: true, 
+}));
 
 dotenv.config();
 
