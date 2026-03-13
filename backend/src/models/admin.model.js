@@ -33,6 +33,7 @@ export const getReporteComments = async () => {
 export const unreportComment = async (id) => {
     try {
         const [comment] = await db.query('UPDATE comments SET reported = 0 WHERE id = ?', [id]);
+        return comment.affectedRows > 0;
     } catch (error) {
         console.error('erreur server (unreportComment)', error.message);
     }
@@ -41,6 +42,7 @@ export const unreportComment = async (id) => {
 export const deleteComment = async (id) => {
     try {
         const [comment] = await db.query ('DELETE FROM comments WHERE id = ?', [id]);
+        return comment.affectedRows > 0;
     } catch (error) {
         console.error('erreur server (deleteComment)', error.message);
     }
@@ -51,6 +53,7 @@ export const deleteUser = async (id) => {
     await db.query('DELETE FROM comments WHERE user_id = ?', [id]);
     await db.query('DELETE FROM ratings WHERE user_id = ?', [id]);
     await db.query('DELETE FROM users WHERE id = ?', [id]);
+    return true;
   } catch (error) {
     console.error('erreur server (deleteUser)', error.message);
   }

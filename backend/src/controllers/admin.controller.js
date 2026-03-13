@@ -10,15 +10,14 @@ import {
 export const deletedGame = async (req, res) => {
   try {
     const { id } = req.params;
-    const deleted = await deleteGame(id),
-      [game] = await db.query("SELECT * FROM games WHERE id = ?", [id]);
+    const deleted = await deleteGame(id);
     if (!deleted) {
       return res.status(404).json({ message: "jeu non trouvé" });
     }
     res.status(200).json({ message: "jeu supprimé" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "erreur server (deleteGame" });
+    res.status(500).json({ message: "erreur server (deleteGame)" });
   }
 };
 
@@ -33,7 +32,7 @@ export const patchGame = async (req, res) => {
     res.status(200).json({ message: "jeu mis à jour" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "erreur server (updateGame" });
+    res.status(500).json({ message: "erreur server (updateGame)" });
   }
 };
 
@@ -43,7 +42,7 @@ export const getReportedComments = async (req, res) => {
         res.json(comments);
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "erreur server (getReportedComments" });
+        res.status(500).json({ message: "erreur server (getReportedComments)" });
     }
 };
 
@@ -57,7 +56,7 @@ export const unReportedComment = async (req, res) => {
         res.status(200).json({message: 'commentaire non reporté'});
     } catch (error) {
         console.error(error);
-        res.status(500).json({ message: "erreur server (unreportComment" });
+        res.status(500).json({ message: "erreur server (unreportComment)" });
     }
 };
 
@@ -71,7 +70,7 @@ export const deletedComments = async (req, res) => {
         res.status(200).json ({message: 'commentaire supprimé'});
     }catch(error){
         console.error(error);
-        res.status(500).json({message: 'erreur server (deleteComments'});
+        res.status(500).json({message: 'erreur server (deleteComments)'});
     }
 }
 
@@ -85,6 +84,6 @@ export const deletedUser = async (req, res) => {
         res.status(200).json ({message: 'utilisateur supprimé'});
     }catch(error){
         console.error(error);
-        res.status(500).json({message: 'erreur server (deleteUser'});
+        res.status(500).json({message: 'erreur server (deleteUser)'});
     }
 }   
