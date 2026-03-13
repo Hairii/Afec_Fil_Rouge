@@ -8,6 +8,7 @@ import gameRoutes from "./routes/game.routes.js";
 import authRoutes from "./routes/auth.routes.js";
 import genreRoutes from "./routes/genre.routes.js";
 import commentsRoutes from "./routes/comments.routes.js";
+import ratingRoutes from "./routes/rating.routes.js";
 
 dotenv.config();
 
@@ -27,4 +28,5 @@ app.use("/api/games", gameRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/genres", genreRoutes);
 app.use("/api/comments", commentsRoutes);
+app.use("/api/rating", ratingRoutes);
 export default app;
