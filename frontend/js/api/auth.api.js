@@ -42,4 +42,15 @@ const logout = async () => {
     }
 }
 
-export { login, register, logout };
+const getUser = async () => {
+  try {
+    const response = await fetch('http://localhost:3000/api/auth/user', {
+      credentials: 'include',
+    });
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { login, register, logout, getUser};

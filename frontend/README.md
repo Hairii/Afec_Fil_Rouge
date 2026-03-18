@@ -1,1 +1,55 @@
-# Afec_Fil_Rouge
+# Afec_Fil_Rouge```
+└── 📁backend
+    └── 📁src
+        └── 📁config
+            ├── db.js
+        └── 📁controllers
+            ├── admin.controller.js
+            ├── auth.controller.js
+            ├── comments.controller.js
+            ├── game.controller.js
+            ├── genre.controller.js
+            ├── rating.controller.js
+        └── 📁middlewares
+            ├── auth.middleware.js
+        └── 📁models
+            ├── admin.model.js
+            ├── auth.model.js
+            ├── comments.model.js
+            ├── game.model.js
+            ├── genre.model.js
+            ├── rating.model.js
+        └── 📁routes
+            ├── admin.routes.js
+            ├── auth.routes.js
+            ├── comments.routes.js
+            ├── game.routes.js
+            ├── genre.routes.js
+            ├── rating.routes.js
+        └── 📁validations
+            ├── auth.validation.js
+            ├── rating.validation.js
+        ├── app.js
+        ├── server.js
+    ├── .env
+    ├── package-lock.json
+    └── package.json
+``````
+└── 📁frontend
+    └── 📁css
+        ├── main.css
+    └── 📁html
+        ├── README.md
+    └── 📁js
+        └── 📁api
+            ├── admin.api.js
+            ├── auth.api.js
+            ├── comment.api.js
+            ├── game.api.js
+            ├── genre.api.js
+            ├── rating.api.js
+        ├── README.md
+    ├── package-lock.json
+    ├── package.json
+    └── README.md
+```

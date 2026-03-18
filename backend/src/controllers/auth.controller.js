@@ -76,3 +76,12 @@ export const logout = (req, res) => {
   });
   res.json({message: 'Deconnexion réussie'});
 }
+
+//pour avoir les infos de l'utilisateur via le cookie/token
+export const user = (req, res) => {
+  res.json({
+    id: req.user.id,
+    username: req.user.username,
+    role: req.user.role,
+  });
+};
