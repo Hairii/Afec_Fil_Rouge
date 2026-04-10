@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accueil - GameFinder</title>
+  <link href="/css/output.css" rel="stylesheet" />
+  <link href="/css/style.css" rel="stylesheet" />
+</head>
+
+<body class="font-sans bg-cover bg-center min-h-screen" style="background-image: url('/image/background.jpg')">
+
+  <!-- Header injecté par header.js -->
+
+  <!-- ====== MAIN ====== -->
+  <main class="min-h-[80vh] p-6 text-center">
+    <div class="max-w-7xl mx-auto flex flex-col gap-6">
+
+      <!-- Jeux populaires -->
+      <div>
+        <h2 class="text-2xl text-white font-semibold text-center mt-6 mb-2">Jeux les plus populaires</h2>
+        <div class="relative overflow-visible min-h-[300px]">
+          <button id="prevSlidePopular" class="absolute top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-600/50 text-white text-2xl shadow-lg hover:scale-110 hover:bg-indigo-500 -left-8 md:-left-6">&#10094;</button>
+          <div id="popularGamesCarousel" class="flex gap-6 p-4 overflow-x-auto snap-x snap-mandatory touch-pan-x scrollbar-hide"></div>
+          <button id="nextSlidePopular" class="absolute top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-600/50 text-white text-2xl shadow-lg hover:scale-110 hover:bg-indigo-500 -right-8 md:-right-6">&#10095;</button>
+        </div>
+      </div>
+
+      <!-- Dernières sorties -->
+      <div>
+        <h2 class="text-2xl text-white font-semibold text-center mt-2 mb-2">Dernières sorties</h2>
+        <div class="relative overflow-visible min-h-[300px]">
+          <button id="prevSlide" class="absolute top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-600/50 text-white text-2xl shadow-lg hover:scale-110 hover:bg-indigo-500 -left-8 md:-left-6">&#10094;</button>
+          <div id="latestGamesCarousel" class="flex gap-6 p-4 overflow-x-auto snap-x snap-mandatory touch-pan-x scrollbar-hide"></div>
+          <button id="nextSlide" class="absolute top-1/2 -translate-y-1/2 z-30 w-12 h-12 flex items-center justify-center rounded-full bg-indigo-600/50 text-white text-2xl shadow-lg hover:scale-110 hover:bg-indigo-500 -right-8 md:-right-6">&#10095;</button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+
+
+  <script type="module" src="/js/header.js"></script>
+  <script src="/js/footer.js"></script>
+</body>
+</html>
