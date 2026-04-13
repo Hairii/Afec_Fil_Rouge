@@ -1,4 +1,4 @@
-import { getUser, logout } from './api/auth.api.js';
+import { getUser, logout } from '../api/auth.api.js';
 
 // ====== MENU BURGER ======
 const burgerBtn = document.getElementById('burgerBtn');

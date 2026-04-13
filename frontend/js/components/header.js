@@ -1,6 +1,6 @@
-import { getUser, logout } from './api/auth.api.js';
+import { getUser, logout } from '../api/auth.api.js';
 
-(function () {
+
   const html = `
     <header class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-indigo-600/50 shadow-lg sticky top-0 z-50">
       <div class="max-w-7xl mx-auto flex justify-between items-center p-6">
@@ -88,4 +88,3 @@ import { getUser, logout } from './api/auth.api.js';
   };
 
   renderHeader();
-})();

@@ -1,15 +1,21 @@
-import { getGames, getGameById} from '../models/game.model.js';
+import { getGames, getGameById } from '../models/game.model.js';
 
 
 //recuperer tous les jeux
 export const getAllGames = async (req, res) => {
-    try{
-        const games = await getGames();
-        res.status(200).json(games);
-    }catch(error){
-        console.error('erreur server(getAllGames)',error.message);
-    }
-}
+  try {
+    const page = parseInt(req.query.page) || 1;
+    const search = req.query.search || '';
+    const genres = req.query.genres ? req.query.genres.split(',') : [];
+    const sort = req.query.sort || '';
+
+    const result = await getGames({ page, search, genres, sort });
+    res.status(200).json(result);
+  } catch (error) {
+    console.error('erreur server (getAllGames)', error.message);
+    res.status(500).json({ message: 'erreur server (getAllGames)' });
+  }
+};
 
 //recuper un seul jeu
 export const getOneGame = async (req, res) => {

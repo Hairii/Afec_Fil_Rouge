@@ -9,4 +9,4 @@ const getGenres = async () => {
   }
 };
 
-export default getGenres;
+export { getGenres };
