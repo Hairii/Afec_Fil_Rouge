@@ -39,7 +39,7 @@ app.use("/api/games", gameRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/genres", genreRoutes);
 app.use("/api/comments", commentsRoutes);
-app.use("/api/rating", ratingRoutes);
+app.use("/api/ratings", ratingRoutes);
 app.use("/api/admin", adminRoutes);
 
 

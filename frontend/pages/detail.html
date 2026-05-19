@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Détail du jeu - GameFinder</title>
+  <link href="../css/output.css" rel="stylesheet" />
+</head>
+
+<body class="font-sans bg-cover bg-center min-h-screen" style="background-image: url('../public/image/background.jpg')">
+
+
+
+  <main class="min-h-[80vh] p-6">
+    <div class="max-w-5xl mx-auto flex flex-col gap-8">
+
+
+      <a href="/pages/liste_jeux.html" class="self-start flex items-center gap-2 text-indigo-400 hover:text-blue-400 transition font-semibold">
+        &#8592; Retour à la liste
+      </a>
+
+      <div id="loadingBlock" class="text-white text-center py-20 text-xl">Chargement...</div>
+
+      <div id="errorBlock" class="hidden text-red-400 text-center py-20 text-xl">Jeu introuvable.</div>
+
+
+      <div id="gameDetail" class="hidden flex flex-col gap-8">
+
+        <!-- image + infos générales -->
+        <div class="flex flex-col md:flex-row gap-8 bg-gray-900/70 backdrop-blur-md rounded-2xl p-6 border border-indigo-600/30 shadow-xl">
+          <img id="gameImage" src="" alt="" class="w-full md:w-72 h-56 object-cover rounded-xl shadow-lg flex-shrink-0" />
+          <div class="flex flex-col gap-3 flex-1">
+            <h1 id="gameName" class="text-3xl font-extrabold text-white"></h1>
+            <div class="flex flex-wrap gap-2" id="gameGenres"></div>
+            <p id="gameRelease" class="text-gray-400 text-sm"></p>
+            <p id="gameDescription" class="text-gray-300 text-sm leading-relaxed mt-2"></p>
+
+            <!-- Note moyenne -->
+            <div class="mt-auto flex items-center gap-3">
+              <div class="flex items-center gap-1">
+                <span class="text-yellow-400 text-2xl">&#9733;</span>
+                <span id="avgRating" class="text-white font-bold text-xl">--</span>
+                <span class="text-gray-400 text-sm">/5</span>
+              </div>
+              <span id="ratingCount" class="text-gray-400 text-sm"></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section notation -->
+        <div id="ratingSection" class="bg-gray-900/70 backdrop-blur-md rounded-2xl p-6 border border-indigo-600/30 shadow-xl">
+          <h2 class="text-xl font-bold text-white mb-4">Votre note</h2>
+          <div id="ratingGuest" class="hidden text-gray-400">
+            <a href="/pages/login.html" class="text-indigo-400 hover:underline">Connectez-vous</a> pour noter ce jeu.
+          </div>
+          <div id="ratingForm" class="hidden flex flex-col gap-4">
+            <div class="flex gap-2" id="starContainer">
+            </div>
+            <button id="submitRating" class="self-start px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-blue-500 transition font-semibold shadow-md">
+              Envoyer ma note
+            </button>
+            <p id="ratingMessage" class="text-sm mt-1"></p>
+          </div>
+        </div>
+
+        <!--  commentaires -->
+        <div class="bg-gray-900/70 backdrop-blur-md rounded-2xl p-6 border border-indigo-600/30 shadow-xl flex flex-col gap-6">
+          <h2 class="text-xl font-bold text-white">Commentaires</h2>
+
+          <div id="commentFormSection" class="hidden flex flex-col gap-3">
+            <textarea id="commentInput" rows="3" placeholder="Écrivez votre commentaire..."
+              class="w-full bg-gray-800/80 border border-indigo-600/40 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
+            <button id="submitComment" class="self-start px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-blue-500 transition font-semibold shadow-md">
+              Publier
+            </button>
+            <p id="commentMessage" class="text-sm"></p>
+          </div>
+
+
+          <div id="commentGuest" class="hidden text-gray-400">
+            <a href="/pages/login.html" class="text-indigo-400 hover:underline">Connectez-vous</a> pour laisser un commentaire.
+          </div>
+
+
+          <div id="commentsList" class="flex flex-col gap-4">
+
+          </div>
+
+          <div id="noComments" class="hidden text-gray-400 text-sm">Aucun commentaire pour l'instant.</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <script type="module" src="../js/components/header.js"></script>
+  <script type="module" src="../js/components/footer.js"></script>
+  <script type="module" src="../js/controller/detail.controller.js"></script>
+</body>
+</html>
