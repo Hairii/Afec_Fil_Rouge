@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion - GameFinder</title>
+  <link href="../css/output.css" rel="stylesheet" />
+</head>
+
+<body class="font-sans bg-cover bg-center min-h-screen flex flex-col" style="background-image: url('../public/image/background.jpg')">
+
+  <main class="flex-1 flex items-center justify-center p-6">
+    <div class="w-full max-w-md bg-gray-900/80 backdrop-blur-md rounded-2xl border border-indigo-600/30 shadow-2xl p-8 flex flex-col gap-6">
+
+      <!-- toggle -->
+      <div class="flex rounded-xl overflow-hidden border border-indigo-600/40">
+        <button id="tabLogin"
+          class="flex-1 py-2 text-sm font-semibold transition bg-indigo-600 text-white">
+          Connexion
+        </button>
+        <button id="tabRegister"
+          class="flex-1 py-2 text-sm font-semibold transition bg-transparent text-gray-400 hover:text-white">
+          Inscription
+        </button>
+      </div>
+
+      <!-- connexion -->
+      <div id="formLogin" class="flex flex-col gap-4">
+        <h2 class="text-2xl font-extrabold text-white text-center">Bon retour 👋</h2>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-gray-400 text-sm">Email</label>
+          <input id="loginMail" type="email" placeholder="exemple@mail.com"
+            class="bg-gray-800/80 border border-indigo-600/40 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-gray-400 text-sm">Mot de passe</label>
+          <input id="loginPassword" type="password" placeholder="••••••••"
+            class="bg-gray-800/80 border border-indigo-600/40 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <p id="loginMessage" class="text-sm text-center min-h-[20px]"></p>
+
+        <button id="submitLogin"
+          class="w-full py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-blue-500 transition shadow-md">
+          Se connecter
+        </button>
+      </div>
+
+      <!-- inscritpion -->
+      <div id="formRegister" class="hidden flex flex-col gap-4">
+        <h2 class="text-2xl font-extrabold text-white text-center">Créer un compte 🎮</h2>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-gray-400 text-sm">Nom d'utilisateur</label>
+          <input id="registerUsername" type="text" placeholder="MonPseudo"
+            class="bg-gray-800/80 border border-indigo-600/40 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-gray-400 text-sm">Email</label>
+          <input id="registerMail" type="email" placeholder="exemple@mail.com"
+            class="bg-gray-800/80 border border-indigo-600/40 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-gray-400 text-sm">Mot de passe</label>
+          <input id="registerPassword" type="password" placeholder="••••••••"
+            class="bg-gray-800/80 border border-indigo-600/40 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <div class="flex flex-col gap-1">
+          <label class="text-gray-400 text-sm">Confirmer le mot de passe</label>
+          <input id="registerConfirmPassword" type="password" placeholder="••••••••"
+            class="bg-gray-800/80 border border-indigo-600/40 rounded-xl px-4 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+        </div>
+
+        <p id="registerMessage" class="text-sm text-center min-h-[20px]"></p>
+
+        <button id="submitRegister"
+          class="w-full py-2 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-blue-500 transition shadow-md">
+          S'inscrire
+        </button>
+      </div>
+
+    </div>
+  </main>
+
+  <script type="module" src="../js/components/header.js"></script>
+  <script type="module" src="../js/components/footer.js"></script>
+  <script type="module" src="../js/controller/login.controller.js"></script>
+</body>
+</html>
