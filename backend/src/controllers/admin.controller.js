@@ -32,7 +32,6 @@ export const deletedGame = async (req, res) => {
   }
 };
 
-// PATCH — met à jour uniquement les champs envoyés
 export const patchGame = async (req, res) => {
   try {
     const { id } = req.params;

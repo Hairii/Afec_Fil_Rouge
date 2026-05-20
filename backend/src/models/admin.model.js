@@ -54,7 +54,12 @@ export const updateGame = async (id, fields) => {
 
 export const getReporteComments = async () => {
   try {
-    const [comments] = await db.query('SELECT * FROM comments WHERE reported = 1');
+    const [comments] = await db.query(
+      `SELECT comments.*, users.username
+       FROM comments
+       JOIN users ON comments.user_id = users.id
+       WHERE comments.reported = 1`
+    );
     return comments;
   } catch (error) {
     console.error('erreur server (getReportedComments)', error.message);

@@ -21,7 +21,6 @@ const deleteGame = async (id) => {
   }
 };
 
-// PATCH — envoie uniquement les champs modifiés
 const updateGame = async (id, fields) => {
   try {
     const response = await fetch(`http://localhost:3000/api/admin/games/${id}`, {
