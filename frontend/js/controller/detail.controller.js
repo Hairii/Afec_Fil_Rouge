@@ -26,12 +26,14 @@ const init = async () => {
     return;
   }
 
+  // Chargement parallèle : jeu + note + commentaires + user
   const [game, ratingData, comments, user] = await Promise.all([
     getGameById(gameId),
     getRatings(gameId),
     getComments(gameId),
     getUser(),
   ]);
+
 
   if (!game || game.message) {
     renderError();
@@ -45,9 +47,10 @@ const init = async () => {
   const isConnected = user && !user.message;
 
   if (isConnected) {
+    selectedRating = ratingData?.userRating || null;
     renderRatingForm((note) => {
       selectedRating = note;
-    });
+    }, ratingData?.userRating || null);
   } else {
     renderRatingGuest();
   }
@@ -60,7 +63,7 @@ const init = async () => {
 
   renderComments(comments, user, handleDeleteComment);
 
-  // envoi de la note
+  // envoi de la note 
   document.getElementById('submitRating')?.addEventListener('click', async () => {
     if (!selectedRating) {
       renderRatingMessage('Sélectionnez une note avant d\'envoyer.', true);
@@ -71,6 +74,7 @@ const init = async () => {
 
     if (result && !result.message?.includes('erreur')) {
       renderRatingMessage('Note envoyée ! Merci 🎮');
+      // Rafraîchir la note moyenne
       const updated = await getRatings(gameId);
       renderRating(updated);
     } else {

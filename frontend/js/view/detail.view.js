@@ -9,6 +9,7 @@ const renderGame = (game) => {
     : '';
   document.getElementById('gameDescription').textContent = game.description || '';
 
+  // genres 
   const genresEl = document.getElementById('gameGenres');
   genresEl.innerHTML = '';
   if (game.genres && game.genres.length) {
@@ -20,11 +21,9 @@ const renderGame = (game) => {
     });
   }
 
-
   document.getElementById('loadingBlock').classList.add('hidden');
   document.getElementById('gameDetail').classList.remove('hidden');
 };
-
 
 const renderRating = (ratingData) => {
   const avg = ratingData?.average_rating;
@@ -37,19 +36,33 @@ const renderRating = (ratingData) => {
 };
 
 
-const renderRatingForm = (onStarClick) => {
+const renderRatingForm = (onStarClick, existingRating = null) => {
   document.getElementById('ratingGuest').classList.add('hidden');
   document.getElementById('ratingForm').classList.remove('hidden');
 
   const container = document.getElementById('starContainer');
   container.innerHTML = '';
 
+
+  let label = document.getElementById('ratingLabel');
+  if (!label) {
+    label = document.createElement('p');
+    label.id = 'ratingLabel';
+    container.parentNode.insertBefore(label, container);
+  }
+  label.className = 'text-gray-400 text-sm mb-1';
+  label.textContent = existingRating
+    ? `Votre note actuelle : ${existingRating}/5 — cliquez pour modifier`
+    : '';
+
   for (let i = 1; i <= 5; i++) {
     const star = document.createElement('button');
     star.type = 'button';
     star.dataset.value = i;
-    star.textContent = '☆';
-    star.className = 'text-3xl text-gray-500 hover:text-yellow-400 transition star-btn cursor-pointer';
+    star.textContent = existingRating && i <= existingRating ? '★' : '☆';
+    star.className = `text-3xl transition star-btn cursor-pointer ${
+      existingRating && i <= existingRating ? 'text-yellow-400' : 'text-gray-500 hover:text-yellow-400'
+    }`;
     star.addEventListener('click', () => {
       container.querySelectorAll('.star-btn').forEach((s) => {
         const v = parseInt(s.dataset.value);
@@ -57,25 +70,23 @@ const renderRatingForm = (onStarClick) => {
         s.classList.toggle('text-yellow-400', v <= i);
         s.classList.toggle('text-gray-500', v > i);
       });
+      label.textContent = `Note sélectionnée : ${i}/5`;
       onStarClick(i);
     });
     container.appendChild(star);
   }
 };
 
-
 const renderRatingGuest = () => {
   document.getElementById('ratingGuest').classList.remove('hidden');
   document.getElementById('ratingForm').classList.add('hidden');
 };
-
 
 const renderRatingMessage = (msg, isError = false) => {
   const el = document.getElementById('ratingMessage');
   el.textContent = msg;
   el.className = `text-sm mt-1 ${isError ? 'text-red-400' : 'text-green-400'}`;
 };
-
 
 const renderComments = (comments, user, onDelete) => {
   const list = document.getElementById('commentsList');
@@ -115,18 +126,15 @@ const renderComments = (comments, user, onDelete) => {
   });
 };
 
-
 const renderCommentForm = () => {
   document.getElementById('commentGuest').classList.add('hidden');
   document.getElementById('commentFormSection').classList.remove('hidden');
 };
 
-
 const renderCommentGuest = () => {
   document.getElementById('commentGuest').classList.remove('hidden');
   document.getElementById('commentFormSection').classList.add('hidden');
 };
-
 
 const renderCommentMessage = (msg, isError = false) => {
   const el = document.getElementById('commentMessage');
@@ -134,12 +142,10 @@ const renderCommentMessage = (msg, isError = false) => {
   el.className = `text-sm ${isError ? 'text-red-400' : 'text-green-400'}`;
 };
 
-
 const renderError = () => {
   document.getElementById('loadingBlock').classList.add('hidden');
   document.getElementById('errorBlock').classList.remove('hidden');
 };
-
 
 const escapeHTML = (str) =>
   String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
