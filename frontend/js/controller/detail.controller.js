@@ -26,7 +26,6 @@ const init = async () => {
     return;
   }
 
-  // Chargement parallèle : jeu + note + commentaires + user
   const [game, ratingData, comments, user] = await Promise.all([
     getGameById(gameId),
     getRatings(gameId),
@@ -74,7 +73,6 @@ const init = async () => {
 
     if (result && !result.message?.includes('erreur')) {
       renderRatingMessage('Note envoyée ! Merci 🎮');
-      // Rafraîchir la note moyenne
       const updated = await getRatings(gameId);
       renderRating(updated);
     } else {
