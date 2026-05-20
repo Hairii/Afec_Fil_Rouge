@@ -1,35 +1,35 @@
-const deleteGame = async (id) => {
+const getAdminGames = async () => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/admin/games/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      },
-    );
+    const response = await fetch('http://localhost:3000/api/admin/games', {
+      credentials: 'include',
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
   }
 };
 
-const updateGame = async (id, name, released) => {
+const deleteGame = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/admin/games/${id}`,
-      {
-        method: "PATCH",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ name, released }),
-      },
-    );
+    const response = await fetch(`http://localhost:3000/api/admin/games/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+// PATCH — envoie uniquement les champs modifiés
+const updateGame = async (id, fields) => {
+  try {
+    const response = await fetch(`http://localhost:3000/api/admin/games/${id}`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields),
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -38,8 +38,8 @@ const updateGame = async (id, name, released) => {
 
 const getReportedComments = async () => {
   try {
-    const response = await fetch("http://localhost:3000/api/admin/comments", {
-      credentials: "include",
+    const response = await fetch('http://localhost:3000/api/admin/comments', {
+      credentials: 'include',
     });
     return await response.json();
   } catch (error) {
@@ -49,17 +49,11 @@ const getReportedComments = async () => {
 
 const unreportComment = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/admin/comments/${id}`,
-      {
-        method: "PATCH",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      },
-    );
+    const response = await fetch(`http://localhost:3000/api/admin/comments/${id}`, {
+      method: 'PATCH',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -68,17 +62,10 @@ const unreportComment = async (id) => {
 
 const deleteComment = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/admin/comments/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      },
-    );
+    const response = await fetch(`http://localhost:3000/api/admin/comments/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -87,28 +74,14 @@ const deleteComment = async (id) => {
 
 const deleteUser = async (id) => {
   try {
-    const response = await fetch(
-      `http://localhost:3000/api/admin/users/${id}`,
-      {
-        method: "DELETE",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id }),
-      },
-    );
+    const response = await fetch(`http://localhost:3000/api/admin/users/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
   }
 };
 
-export {
-  deleteGame,
-  updateGame,
-  getReportedComments,
-  unreportComment,
-  deleteComment,
-  deleteUser,
-};
+export { getAdminGames, deleteGame, updateGame, getReportedComments, unreportComment, deleteComment, deleteUser };
