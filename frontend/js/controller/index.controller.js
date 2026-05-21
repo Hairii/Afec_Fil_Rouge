@@ -1,43 +1,34 @@
 import { getGames } from '../api/game.api.js';
 import { renderCarousel } from '../view/index.view.js';
 
-
-
-
-// ====== CARROUSEL POPULAIRES ======
 const popularCarousel = document.getElementById('popularGamesCarousel');
 const prevPopular = document.getElementById('prevSlidePopular');
 const nextPopular = document.getElementById('nextSlidePopular');
 
-// ====== CARROUSEL DERNIÈRES SORTIES ======
 const latestCarousel = document.getElementById('latestGamesCarousel');
 const prevLatest = document.getElementById('prevSlide');
 const nextLatest = document.getElementById('nextSlide');
 
-// ====== CHARGEMENT DES JEUX ======
-const init = async () => {
-  const popular = await getGames(1, '', [], 'rating-desc');
-  console.log('popular:', popular); 
-  const latest = await getGames(1, '', [], '');
-  console.log('latest:', latest); 
-
-renderCarousel(popularCarousel, popular.games, false); 
-renderCarousel(latestCarousel, latest.games, true);   
+// scroll de la largeur de la carte
+const scrollCarousel = (carousel, direction) => {
+  const card = carousel.querySelector(':scope > *');
+  if (!card) return;
+  const cardWidth = card.offsetWidth + 24; // 24px = gap-6
+  carousel.scrollBy({ left: direction * cardWidth, behavior: 'smooth' });
 };
 
-// ====== BOUTONS CARROUSEL ======
-prevPopular?.addEventListener('click', () => {
-  popularCarousel.scrollBy({ left: -300, behavior: 'smooth' });
-});
-nextPopular?.addEventListener('click', () => {
-  popularCarousel.scrollBy({ left: 300, behavior: 'smooth' });
-});
+const init = async () => {
+  const popular = await getGames(1, '', [], 'rating-desc');
+  const latest = await getGames(1, '', [], '');
 
-prevLatest?.addEventListener('click', () => {
-  latestCarousel.scrollBy({ left: -300, behavior: 'smooth' });
-});
-nextLatest?.addEventListener('click', () => {
-  latestCarousel.scrollBy({ left: 300, behavior: 'smooth' });
-});
+  renderCarousel(popularCarousel, popular.games, false);
+  renderCarousel(latestCarousel, latest.games, true);
+};
+
+prevPopular?.addEventListener('click', () => scrollCarousel(popularCarousel, -1));
+nextPopular?.addEventListener('click', () => scrollCarousel(popularCarousel, 1));
+
+prevLatest?.addEventListener('click', () => scrollCarousel(latestCarousel, -1));
+nextLatest?.addEventListener('click', () => scrollCarousel(latestCarousel, 1));
 
 init();

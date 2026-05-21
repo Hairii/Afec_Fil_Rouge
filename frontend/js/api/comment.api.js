@@ -1,6 +1,6 @@
 const getComments = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/comments/${id}`, {
+    const response = await fetch(`/api/comments/${id}`, {
       credentials: 'include',
     });
     return await response.json();
@@ -11,7 +11,7 @@ const getComments = async (id) => {
 
 const addComments = async (id, comment) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/comments/add`, {
+    const response = await fetch('/api/comments/add', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -25,7 +25,7 @@ const addComments = async (id, comment) => {
 
 const reportComment = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/comments/report/${id}`, {
+    const response = await fetch(`/api/comments/report/${id}`, {
       method: 'PATCH',
       credentials: 'include',
     });

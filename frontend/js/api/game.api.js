@@ -1,14 +1,13 @@
 const getGames = async (page = 1, search = '', genres = [], sort = '') => {
   try {
-    const url = new URL('http://localhost:3000/api/games');
-    url.searchParams.append('page', page); // pagination
-    url.searchParams.append('search', search); // input recherche
-    url.searchParams.append('sort', sort); // trie par alphabet ou note
-    if (genres.length) url.searchParams.append('genres', genres.join(',')); // trie par genre
+    const url = new URL('/api/games', window.location.origin);
+    url.searchParams.append('page', page);
+    url.searchParams.append('search', search);
+    url.searchParams.append('sort', sort);
+    if (genres.length) url.searchParams.append('genres', genres.join(','));
 
     const response = await fetch(url, { credentials: 'include' });
-    const games = await response.json();
-    return games;
+    return await response.json();
   } catch (error) {
     console.error(error);
   }
@@ -16,7 +15,7 @@ const getGames = async (page = 1, search = '', genres = [], sort = '') => {
 
 const getGameById = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/games/${id}`, {
+    const response = await fetch(`/api/games/${id}`, {
       credentials: 'include',
     });
     return await response.json();

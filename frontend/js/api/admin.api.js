@@ -1,6 +1,6 @@
 const getAdminGames = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/admin/games', {
+    const response = await fetch('/api/admin/games', {
       credentials: 'include',
     });
     return await response.json();
@@ -11,7 +11,7 @@ const getAdminGames = async () => {
 
 const deleteGame = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/admin/games/${id}`, {
+    const response = await fetch(`/api/admin/games/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });
@@ -23,7 +23,7 @@ const deleteGame = async (id) => {
 
 const updateGame = async (id, fields) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/admin/games/${id}`, {
+    const response = await fetch(`/api/admin/games/${id}`, {
       method: 'PATCH',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -37,7 +37,7 @@ const updateGame = async (id, fields) => {
 
 const getReportedComments = async () => {
   try {
-    const response = await fetch('http://localhost:3000/api/admin/comments', {
+    const response = await fetch('/api/admin/comments', {
       credentials: 'include',
     });
     return await response.json();
@@ -48,7 +48,7 @@ const getReportedComments = async () => {
 
 const unreportComment = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/admin/comments/${id}`, {
+    const response = await fetch(`/api/admin/comments/${id}`, {
       method: 'PATCH',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -61,7 +61,7 @@ const unreportComment = async (id) => {
 
 const deleteComment = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/admin/comments/${id}`, {
+    const response = await fetch(`/api/admin/comments/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });
@@ -73,7 +73,7 @@ const deleteComment = async (id) => {
 
 const deleteUser = async (id) => {
   try {
-    const response = await fetch(`http://localhost:3000/api/admin/users/${id}`, {
+    const response = await fetch(`/api/admin/users/${id}`, {
       method: 'DELETE',
       credentials: 'include',
     });

@@ -97,7 +97,7 @@ const init = async () => {
 const handleDeleteComment = async (commentId) => {
   if (!confirm('Supprimer ce commentaire ?')) return;
   try {
-    const response = await fetch(`http://localhost:3000/api/comments/delete/${commentId}`, {
+    const response = await fetch(`/api/comments/delete/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
     });
