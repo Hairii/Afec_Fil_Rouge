@@ -1,4 +1,4 @@
-import {getComments, createComments, deleteComments, getCommentsByGame} from '../models/comments.model.js';
+import {getComments, createComments, deleteComments, getCommentsByGame, reportCommentModel} from '../models/comments.model.js';
 
 export const getAllComments = async (req, res) => {
     try{
@@ -48,3 +48,13 @@ export const getCommentByGame = async (req, res) => {
         res.status(500).json({message: 'erreur server (getCommentsByGame)'});
     }   
 }
+
+export const reportComment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    await reportCommentModel(id);
+    res.status(200).json({ message: 'commentaire signalé' });
+  } catch (error) {
+    res.status(500).json({ message: 'erreur server (reportComment)' });
+  }
+};

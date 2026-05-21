@@ -45,3 +45,7 @@ export const getCommentsByGame = async (game_id) => {
     console.error("erreur server (getCommentsByGame)", error.message);
   }
 };
+
+export const reportCommentModel = async (id) => {
+  await db.query('UPDATE comments SET reported = TRUE WHERE id = ?', [id]);
+};

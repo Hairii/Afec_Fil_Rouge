@@ -9,7 +9,7 @@ const renderGame = (game) => {
     : '';
   document.getElementById('gameDescription').textContent = game.description || '';
 
-  // genres 
+  // genres
   const genresEl = document.getElementById('gameGenres');
   genresEl.innerHTML = '';
   if (game.genres && game.genres.length) {
@@ -35,14 +35,12 @@ const renderRating = (ratingData) => {
     : '(aucune note)';
 };
 
-
 const renderRatingForm = (onStarClick, existingRating = null) => {
   document.getElementById('ratingGuest').classList.add('hidden');
   document.getElementById('ratingForm').classList.remove('hidden');
 
   const container = document.getElementById('starContainer');
   container.innerHTML = '';
-
 
   let label = document.getElementById('ratingLabel');
   if (!label) {
@@ -88,7 +86,8 @@ const renderRatingMessage = (msg, isError = false) => {
   el.className = `text-sm mt-1 ${isError ? 'text-red-400' : 'text-green-400'}`;
 };
 
-const renderComments = (comments, user, onDelete) => {
+
+const renderComments = (comments, user, onDelete, onReport) => {
   const list = document.getElementById('commentsList');
   const noComments = document.getElementById('noComments');
   list.innerHTML = '';
@@ -103,23 +102,39 @@ const renderComments = (comments, user, onDelete) => {
   comments.forEach((comment) => {
     const card = document.createElement('div');
     card.className = 'bg-gray-800/60 rounded-xl p-4 border border-gray-700/40 flex flex-col gap-2';
+
+
+    const adminBtn = user?.role === 'admin'
+      ? `<button data-id="${comment.id}" class="delete-comment-btn text-red-500 hover:text-red-400 text-xs transition">Supprimer</button>`
+      : '';
+
+
+    const reportBtn = user && user.role !== 'admin'
+      ? comment.reported
+        ? `<span class="text-orange-400 text-xs">🚩 Signalé</span>`
+        : `<button data-id="${comment.id}" class="report-btn text-gray-400 hover:text-orange-400 text-xs transition">🚩 Signaler</button>`
+      : '';
+
     card.innerHTML = `
       <div class="flex justify-between items-start gap-2">
         <div>
           <span class="text-indigo-300 font-semibold text-sm">${escapeHTML(comment.username || 'Anonyme')}</span>
           <span class="text-gray-500 text-xs ml-2">${formatDate(comment.created_at)}</span>
         </div>
-        ${user?.role === 'admin'
-          ? `<button data-id="${comment.id}" class="delete-comment-btn text-red-500 hover:text-red-400 text-xs transition">Supprimer</button>`
-          : ''}
+        <div class="flex items-center gap-2">
+          ${reportBtn}
+          ${adminBtn}
+        </div>
       </div>
       <p class="text-gray-200 text-sm leading-relaxed">${escapeHTML(comment.content)}</p>
     `;
 
     if (user?.role === 'admin') {
-      card.querySelector('.delete-comment-btn').addEventListener('click', () => {
-        onDelete(comment.id);
-      });
+      card.querySelector('.delete-comment-btn')?.addEventListener('click', () => onDelete(comment.id));
+    }
+
+    if (user && user.role !== 'admin' && !comment.reported) {
+      card.querySelector('.report-btn')?.addEventListener('click', () => onReport(comment.id));
     }
 
     list.appendChild(card);
