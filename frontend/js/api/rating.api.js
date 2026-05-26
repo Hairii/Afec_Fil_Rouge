@@ -1,3 +1,5 @@
+import { fetchWithRefresh } from './fetch.js';
+
 const getRatings = async (id) => {
   try {
     const response = await fetch(`/api/ratings/${id}`, {
@@ -11,7 +13,7 @@ const getRatings = async (id) => {
 
 const addRating = async (id, rating) => {
   try {
-    const response = await fetch('/api/ratings/add', {
+    const response = await fetchWithRefresh('/api/ratings/add', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

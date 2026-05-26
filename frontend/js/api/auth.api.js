@@ -1,3 +1,5 @@
+import { fetchWithRefresh } from './fetch.js';
+
 const login = async (mail, password) => {
   try {
     const response = await fetch('/api/auth/login', {
@@ -40,9 +42,9 @@ const logout = async () => {
 
 const getUser = async () => {
   try {
-    const response = await fetch('/api/auth/user', {
-      credentials: 'include',
-    });
+    // si le token est expiré il le recréer
+    const response = await fetchWithRefresh('/api/auth/user');
+    if (!response.ok) return null;
     return await response.json();
   } catch (error) {
     console.error(error);

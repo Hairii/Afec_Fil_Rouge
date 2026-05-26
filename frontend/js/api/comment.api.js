@@ -1,3 +1,5 @@
+import { fetchWithRefresh } from './fetch.js';
+
 const getComments = async (id) => {
   try {
     const response = await fetch(`/api/comments/${id}`, {
@@ -11,7 +13,7 @@ const getComments = async (id) => {
 
 const addComments = async (id, comment) => {
   try {
-    const response = await fetch('/api/comments/add', {
+    const response = await fetchWithRefresh('/api/comments/add', {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
@@ -25,7 +27,7 @@ const addComments = async (id, comment) => {
 
 const reportComment = async (id) => {
   try {
-    const response = await fetch(`/api/comments/report/${id}`, {
+    const response = await fetchWithRefresh(`/api/comments/report/${id}`, {
       method: 'PATCH',
       credentials: 'include',
     });
