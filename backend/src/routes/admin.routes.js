@@ -1,6 +1,7 @@
 import express from 'express';
 import {
   getAdminGames,
+  addGame,
   deletedGame,
   patchGame,
   getReportedComments,
@@ -13,6 +14,7 @@ import { verifyToken, isAdmin } from '../middlewares/auth.middleware.js';
 const router = express.Router();
 
 router.get('/games', verifyToken, isAdmin, getAdminGames);
+router.post('/games', verifyToken, isAdmin, addGame);
 router.delete('/games/:id', verifyToken, isAdmin, deletedGame);
 router.patch('/games/:id', verifyToken, isAdmin, patchGame);
 router.get('/comments', verifyToken, isAdmin, getReportedComments);

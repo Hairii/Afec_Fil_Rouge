@@ -1,4 +1,4 @@
-import { getAdminGames, deleteGame, updateGame } from '../api/admin.api.js';
+import { getAdminGames, createGame, deleteGame, updateGame } from '../api/admin.api.js';
 import { getUser } from '../api/auth.api.js';
 
 let allGames = [];
@@ -23,13 +23,23 @@ const init = async () => {
 
   document.getElementById('searchInput').addEventListener('input', (e) => {
     const q = e.target.value.toLowerCase();
-    const filtered = allGames.filter((g) => g.name.toLowerCase().includes(q));
-    renderTable(filtered);
+    renderTable(allGames.filter((g) => g.name.toLowerCase().includes(q)));
   });
 
-  document.getElementById('cancelEdit').addEventListener('click', closeModal);
+  // modal ajout
+  document.getElementById('openAddModal').addEventListener('click', openAddModal);
+  document.getElementById('cancelAdd').addEventListener('click', closeAddModal);
+  document.getElementById('confirmAdd').addEventListener('click', handleAdd);
+  document.getElementById('addModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('addModal')) closeAddModal();
+  });
 
+  // modal modifier
+  document.getElementById('cancelEdit').addEventListener('click', closeEditModal);
   document.getElementById('confirmEdit').addEventListener('click', handleEdit);
+  document.getElementById('editModal').addEventListener('click', (e) => {
+    if (e.target === document.getElementById('editModal')) closeEditModal();
+  });
 };
 
 const renderTable = (games) => {
@@ -59,33 +69,78 @@ const renderTable = (games) => {
       <td class="px-4 py-3">
         <div class="flex gap-2 justify-center">
           <button data-id="${game.id}" data-name="${escapeHTML(game.name)}" data-released="${game.released || ''}" data-metacritic="${game.metacritic || ''}" data-img="${game.img || ''}"
-            class="edit-btn px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-blue-500 transition text-xs">
-            Modifier
-          </button>
+            class="edit-btn px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-blue-500 transition text-xs">Modifier</button>
           <button data-id="${game.id}" data-name="${escapeHTML(game.name)}"
-            class="delete-btn px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-500 transition text-xs">
-            Supprimer
-          </button>
+            class="delete-btn px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-500 transition text-xs">Supprimer</button>
         </div>
       </td>
     `;
 
     tr.querySelector('.edit-btn').addEventListener('click', (e) => {
-      const btn = e.currentTarget;
-      openModal(btn.dataset.id, btn.dataset.name, btn.dataset.released, btn.dataset.metacritic, btn.dataset.img);
+      const b = e.currentTarget;
+      openEditModal(b.dataset.id, b.dataset.name, b.dataset.released, b.dataset.metacritic, b.dataset.img);
     });
-
     tr.querySelector('.delete-btn').addEventListener('click', (e) => {
-      const btn = e.currentTarget;
-      handleDelete(btn.dataset.id, btn.dataset.name);
+      const b = e.currentTarget;
+      handleDelete(b.dataset.id, b.dataset.name);
     });
 
     tbody.appendChild(tr);
   });
 };
 
-// modal pour editer
-const openModal = (id, name, released, metacritic, img) => {
+const openAddModal = () => {
+  document.getElementById('addName').value = '';
+  document.getElementById('addDescription').value = '';
+  document.getElementById('addReleased').value = '';
+  document.getElementById('addMetacritic').value = '';
+  document.getElementById('addEsrb').value = '';
+  document.getElementById('addImg').value = '';
+  document.getElementById('addGenres').value = '';
+  document.getElementById('addMessage').textContent = '';
+  document.getElementById('addModal').classList.remove('hidden');
+};
+
+const closeAddModal = () => document.getElementById('addModal').classList.add('hidden');
+
+const handleAdd = async () => {
+  const name = document.getElementById('addName').value.trim();
+  const msg = document.getElementById('addMessage');
+
+  if (!name) {
+    msg.textContent = 'Le nom est obligatoire.';
+    msg.className = 'text-sm text-red-400';
+    return;
+  }
+
+  const fields = {
+    name,
+    description: document.getElementById('addDescription').value.trim() || undefined,
+    released: document.getElementById('addReleased').value || undefined,
+    metacritic: document.getElementById('addMetacritic').value ? parseInt(document.getElementById('addMetacritic').value) : undefined,
+    esrb_rating: document.getElementById('addEsrb').value || undefined,
+    img: document.getElementById('addImg').value.trim() || undefined,
+    genres: document.getElementById('addGenres').value
+      ? document.getElementById('addGenres').value.split(',').map((g) => g.trim()).filter(Boolean)
+      : [],
+  };
+
+  const result = await createGame(fields);
+
+  if (result?.message === 'jeu créé') {
+    msg.textContent = 'Jeu ajouté !';
+    msg.className = 'text-sm text-green-400';
+    const games = await getAdminGames();
+    allGames = games;
+    renderTable(allGames);
+    setTimeout(closeAddModal, 800);
+  } else {
+    msg.textContent = result?.message || 'Erreur lors de l\'ajout.';
+    msg.className = 'text-sm text-red-400';
+  }
+};
+
+const openEditModal = (id, name, released, metacritic, img) => {
   editingId = id;
   document.getElementById('editGameName').textContent = name;
   document.getElementById('editName').value = '';
@@ -96,7 +151,7 @@ const openModal = (id, name, released, metacritic, img) => {
   document.getElementById('editModal').classList.remove('hidden');
 };
 
-const closeModal = () => {
+const closeEditModal = () => {
   editingId = null;
   document.getElementById('editModal').classList.add('hidden');
 };
@@ -125,7 +180,7 @@ const handleEdit = async () => {
     const games = await getAdminGames();
     allGames = games;
     renderTable(allGames);
-    setTimeout(closeModal, 800);
+    setTimeout(closeEditModal, 800);
   } else {
     showEditMessage(result?.message || 'Erreur lors de la mise à jour.', true);
   }
@@ -154,11 +209,6 @@ const handleDelete = async (id, name) => {
     msg.className = 'text-sm text-red-400';
   }
 };
-
-// ferme modal
-document.getElementById('editModal').addEventListener('click', (e) => {
-  if (e.target === document.getElementById('editModal')) closeModal();
-});
 
 const escapeHTML = (str) =>
   String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');

@@ -1,5 +1,6 @@
 import {
   getAllGamesAdmin,
+  createGame,
   deleteGame,
   updateGame,
   getReporteComments,
@@ -18,13 +19,24 @@ export const getAdminGames = async (req, res) => {
   }
 };
 
+export const addGame = async (req, res) => {
+  try {
+    const { name, description, released, metacritic, esrb_rating, img, genres } = req.body;
+    if (!name) return res.status(400).json({ message: "Le nom est obligatoire" });
+
+    const gameId = await createGame({ name, description, released, metacritic, esrb_rating, img, genres });
+    res.status(201).json({ message: "jeu créé", id: gameId });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "erreur server (addGame)" });
+  }
+};
+
 export const deletedGame = async (req, res) => {
   try {
     const { id } = req.params;
     const deleted = await deleteGame(id);
-    if (!deleted) {
-      return res.status(404).json({ message: "jeu non trouvé" });
-    }
+    if (!deleted) return res.status(404).json({ message: "jeu non trouvé" });
     res.status(200).json({ message: "jeu supprimé" });
   } catch (error) {
     console.error(error);
@@ -37,9 +49,7 @@ export const patchGame = async (req, res) => {
     const { id } = req.params;
     const fields = req.body;
     const updated = await updateGame(id, fields);
-    if (!updated) {
-      return res.status(404).json({ message: "jeu non trouvé ou aucun champ valide" });
-    }
+    if (!updated) return res.status(404).json({ message: "jeu non trouvé ou aucun champ valide" });
     res.status(200).json({ message: "jeu mis à jour" });
   } catch (error) {
     console.error(error);
@@ -61,9 +71,7 @@ export const unReportedComment = async (req, res) => {
   try {
     const { id } = req.params;
     const unreported = await unreportComment(id);
-    if (!unreported) {
-      return res.status(404).json({ message: "commentaire non trouvé" });
-    }
+    if (!unreported) return res.status(404).json({ message: "commentaire non trouvé" });
     res.status(200).json({ message: "commentaire désignalé" });
   } catch (error) {
     console.error(error);
@@ -75,9 +83,7 @@ export const deletedComments = async (req, res) => {
   try {
     const { id } = req.params;
     const deleted = await deleteComment(id);
-    if (!deleted) {
-      return res.status(404).json({ message: "commentaire non trouvé" });
-    }
+    if (!deleted) return res.status(404).json({ message: "commentaire non trouvé" });
     res.status(200).json({ message: "commentaire supprimé" });
   } catch (error) {
     console.error(error);
@@ -89,9 +95,7 @@ export const deletedUser = async (req, res) => {
   try {
     const { id } = req.params;
     const deleted = await deleteUser(id);
-    if (!deleted) {
-      return res.status(404).json({ message: "utilisateur non trouvé" });
-    }
+    if (!deleted) return res.status(404).json({ message: "utilisateur non trouvé" });
     res.status(200).json({ message: "utilisateur supprimé" });
   } catch (error) {
     console.error(error);

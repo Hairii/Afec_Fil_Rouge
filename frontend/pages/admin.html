@@ -9,15 +9,19 @@
 
 <body class="font-sans bg-cover bg-center min-h-screen" style="background-image: url('../public/image/background.jpg')">
 
-
   <main class="min-h-[80vh] p-6">
     <div class="max-w-6xl mx-auto flex flex-col gap-6">
 
-      <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center flex-wrap gap-3">
         <h1 class="text-2xl font-extrabold text-white">🎮 Gestion des jeux</h1>
-        <a href="/pages/admin_comments.html" class="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition text-sm font-semibold">
-          💬 Modération commentaires
-        </a>
+        <div class="flex gap-3">
+          <button id="openAddModal" class="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-500 transition text-sm font-semibold">
+            ➕ Ajouter un jeu
+          </button>
+          <a href="/pages/admin_comments.html" class="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition text-sm font-semibold">
+            💬 Modération commentaires
+          </a>
+        </div>
       </div>
 
       <!-- barre de recherche -->
@@ -39,8 +43,7 @@
               <th class="px-4 py-3 text-center">Actions</th>
             </tr>
           </thead>
-          <tbody id="gamesTableBody" class="divide-y divide-gray-700/40 text-gray-200">
-          </tbody>
+          <tbody id="gamesTableBody" class="divide-y divide-gray-700/40 text-gray-200"></tbody>
         </table>
         <div id="loadingMsg" class="text-white text-center py-10">Chargement...</div>
         <div id="emptyMsg" class="hidden text-gray-400 text-center py-10">Aucun jeu trouvé.</div>
@@ -48,6 +51,68 @@
 
     </div>
   </main>
+
+  <!-- modal ajout -->
+  <div id="addModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-gray-900 border border-green-600/40 rounded-2xl shadow-2xl w-full max-w-md p-6 flex flex-col gap-4 max-h-[90vh] overflow-y-auto">
+      <h2 class="text-xl font-bold text-white">➕ Ajouter un jeu</h2>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-gray-400 text-xs">Nom <span class="text-red-400">*</span></label>
+        <input id="addName" type="text" placeholder="Nom du jeu"
+          class="bg-gray-800 border border-indigo-600/40 rounded-xl px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-gray-400 text-xs">Description</label>
+        <textarea id="addDescription" rows="3" placeholder="Description du jeu"
+          class="bg-gray-800 border border-indigo-600/40 rounded-xl px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm resize-none"></textarea>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-gray-400 text-xs">Date de sortie</label>
+        <input id="addReleased" type="date"
+          class="bg-gray-800 border border-indigo-600/40 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-gray-400 text-xs">Metacritic</label>
+        <input id="addMetacritic" type="number" min="0" max="100" placeholder="0-100"
+          class="bg-gray-800 border border-indigo-600/40 rounded-xl px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-gray-400 text-xs">ESRB Rating</label>
+        <select id="addEsrb" class="bg-gray-800 border border-indigo-600/40 rounded-xl px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm">
+          <option value="">-- Non renseigné --</option>
+          <option value="Everyone">Everyone</option>
+          <option value="Everyone 10+">Everyone 10+</option>
+          <option value="Teen">Teen</option>
+          <option value="Mature">Mature</option>
+          <option value="Adults Only">Adults Only</option>
+        </select>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-gray-400 text-xs">URL image</label>
+        <input id="addImg" type="text" placeholder="https://..."
+          class="bg-gray-800 border border-indigo-600/40 rounded-xl px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <label class="text-gray-400 text-xs">Genres (séparés par des virgules)</label>
+        <input id="addGenres" type="text" placeholder="Action, RPG, Aventure"
+          class="bg-gray-800 border border-indigo-600/40 rounded-xl px-3 py-2 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm" />
+      </div>
+
+      <p id="addMessage" class="text-sm min-h-[18px]"></p>
+
+      <div class="flex gap-3 justify-end">
+        <button id="cancelAdd" class="px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition text-sm">Annuler</button>
+        <button id="confirmAdd" class="px-4 py-2 bg-green-600 text-white rounded-xl hover:bg-green-500 transition text-sm font-semibold">Ajouter</button>
+      </div>
+    </div>
+  </div>
 
   <!-- modal pour editer -->
   <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
@@ -82,12 +147,8 @@
       <p id="editMessage" class="text-sm min-h-[18px]"></p>
 
       <div class="flex gap-3 justify-end">
-        <button id="cancelEdit" class="px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition text-sm">
-          Annuler
-        </button>
-        <button id="confirmEdit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-blue-500 transition text-sm font-semibold">
-          Enregistrer
-        </button>
+        <button id="cancelEdit" class="px-4 py-2 bg-gray-700 text-white rounded-xl hover:bg-gray-600 transition text-sm">Annuler</button>
+        <button id="confirmEdit" class="px-4 py-2 bg-indigo-600 text-white rounded-xl hover:bg-blue-500 transition text-sm font-semibold">Enregistrer</button>
       </div>
     </div>
   </div>

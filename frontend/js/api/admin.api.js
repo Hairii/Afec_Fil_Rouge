@@ -1,88 +1,68 @@
 import { fetchWithRefresh } from './fetch.js';
 
-const getAdminGames = async () => {
+export const getAdminGames = async () => {
+  try {
+    const response = await fetchWithRefresh('/api/admin/games');
+    return await response.json();
+  } catch (error) { console.error(error); }
+};
+
+export const createGame = async (fields) => {
   try {
     const response = await fetchWithRefresh('/api/admin/games', {
-      credentials: 'include',
-    });
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const deleteGame = async (id) => {
-  try {
-    const response = await fetchWithRefresh(`/api/admin/games/${id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-    return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
-};
-
-const updateGame = async (id, fields) => {
-  try {
-    const response = await fetchWithRefresh(`/api/admin/games/${id}`, {
-      method: 'PATCH',
-      credentials: 'include',
+      method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(fields),
     });
     return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) { console.error(error); }
 };
 
-const getReportedComments = async () => {
+export const deleteGame = async (id) => {
   try {
-    const response = await fetchWithRefresh('/api/admin/comments', {
-      credentials: 'include',
+    const response = await fetchWithRefresh(`/api/admin/games/${id}`, { method: 'DELETE' });
+    return await response.json();
+  } catch (error) { console.error(error); }
+};
+
+export const updateGame = async (id, fields) => {
+  try {
+    const response = await fetchWithRefresh(`/api/admin/games/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fields),
     });
     return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) { console.error(error); }
 };
 
-const unreportComment = async (id) => {
+export const getReportedComments = async () => {
+  try {
+    const response = await fetchWithRefresh('/api/admin/comments');
+    return await response.json();
+  } catch (error) { console.error(error); }
+};
+
+export const unreportComment = async (id) => {
   try {
     const response = await fetchWithRefresh(`/api/admin/comments/${id}`, {
       method: 'PATCH',
-      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
     });
     return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) { console.error(error); }
 };
 
-const deleteComment = async (id) => {
+export const deleteComment = async (id) => {
   try {
-    const response = await fetchWithRefresh(`/api/admin/comments/${id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
+    const response = await fetchWithRefresh(`/api/admin/comments/${id}`, { method: 'DELETE' });
     return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) { console.error(error); }
 };
 
-const deleteUser = async (id) => {
+export const deleteUser = async (id) => {
   try {
-    const response = await fetchWithRefresh(`/api/admin/users/${id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
+    const response = await fetchWithRefresh(`/api/admin/users/${id}`, { method: 'DELETE' });
     return await response.json();
-  } catch (error) {
-    console.error(error);
-  }
+  } catch (error) { console.error(error); }
 };
-
-export { getAdminGames, deleteGame, updateGame, getReportedComments, unreportComment, deleteComment, deleteUser };

@@ -15,11 +15,36 @@ export const getAllGamesAdmin = async () => {
       name: g.name,
       released: g.released,
       metacritic: g.metacritic,
+      esrb_rating: g.esrb_rating,
       img: g.img,
       genres: g.genre_names ? g.genre_names.split(',') : [],
     }));
   } catch (error) {
     console.error("erreur server (getAllGamesAdmin)", error.message);
+    throw error;
+  }
+};
+
+export const createGame = async ({ name, description, released, metacritic, esrb_rating, img, genres }) => {
+  try {
+    const [result] = await db.query(
+      "INSERT INTO games (name, description, released, metacritic, esrb_rating, img) VALUES (?, ?, ?, ?, ?, ?)",
+      [name, description || null, released || null, metacritic || null, esrb_rating || null, img || null]
+    );
+    const gameId = result.insertId;
+
+    if (genres && genres.length) {
+      for (const genreName of genres) {
+        const [genre] = await db.query("SELECT id FROM genres WHERE name = ?", [genreName]);
+        if (genre[0]) {
+          await db.query("INSERT INTO game_genres (game_id, genre_id) VALUES (?, ?)", [gameId, genre[0].id]);
+        }
+      }
+    }
+
+    return gameId;
+  } catch (error) {
+    console.error("erreur server (createGame)", error.message);
     throw error;
   }
 };
@@ -35,7 +60,7 @@ export const deleteGame = async (id) => {
 
 export const updateGame = async (id, fields) => {
   try {
-    const allowed = ['name', 'released', 'metacritic', 'description', 'img'];
+    const allowed = ['name', 'released', 'metacritic', 'description', 'img', 'esrb_rating'];
     const keys = Object.keys(fields).filter(
       (k) => allowed.includes(k) && fields[k] !== undefined && fields[k] !== ''
     );
