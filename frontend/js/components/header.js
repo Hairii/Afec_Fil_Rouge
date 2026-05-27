@@ -1,7 +1,6 @@
-import { getUser, logout } from '../api/auth.api.js';
+import { getUser, logout } from "../api/auth.api.js";
 
-
-  const html = `
+const html = `
     <header class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-indigo-600/50 shadow-lg sticky top-0 z-50">
       <div class="max-w-7xl mx-auto flex justify-between items-center p-6">
         <a href="/index.html" class="text-3xl font-extrabold text-indigo-400">
@@ -34,57 +33,57 @@ import { getUser, logout } from '../api/auth.api.js';
     <div id="overlay" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden"></div>
   `;
 
-  document.body.insertAdjacentHTML('afterbegin', html);
+document.body.insertAdjacentHTML("afterbegin", html);
 
-  // ====== BURGER ======
-  const burgerBtn = document.getElementById('burgerBtn');
-  const mobileMenu = document.getElementById('mobileMenu');
-  const overlay = document.getElementById('overlay');
+// ====== BURGER ======
+const burgerBtn = document.getElementById("burgerBtn");
+const mobileMenu = document.getElementById("mobileMenu");
+const overlay = document.getElementById("overlay");
 
-  burgerBtn?.addEventListener('click', () => {
-    mobileMenu.classList.toggle('translate-x-full');
-    overlay.classList.toggle('hidden');
-  });
+burgerBtn?.addEventListener("click", () => {
+  mobileMenu.classList.toggle("translate-x-full");
+  overlay.classList.toggle("hidden");
+});
 
-  overlay?.addEventListener('click', () => {
-    mobileMenu.classList.add('translate-x-full');
-    overlay.classList.add('hidden');
-  });
+overlay?.addEventListener("click", () => {
+  mobileMenu.classList.add("translate-x-full");
+  overlay.classList.add("hidden");
+});
 
-  // ====== HEADER DYNAMIQUE ======
-  const renderHeader = async () => {
-    const desktop = document.getElementById('userSection');
-    const mobile = document.getElementById('userSectionMobile');
-    if (!desktop || !mobile) return;
+// ====== HEADER DYNAMIQUE ======
+const renderHeader = async () => {
+  const desktop = document.getElementById("userSection");
+  const mobile = document.getElementById("userSectionMobile");
+  if (!desktop || !mobile) return;
 
-    const user = await getUser();
+  const user = await getUser();
 
-    if (user && !user.message) {
-      const html = `
-        <div class="flex items-center gap-3">
-          <span class="text-white font-semibold">👋 ${user.username}</span>
-          ${user.role === 'admin' ? `<a href="/pages/admin.html" class="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
-          <button id="logoutBtn" class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
-        </div>
-      `;
-      desktop.innerHTML = html;
-      mobile.innerHTML = html;
+  if (user && !user.message) {
+    const html = `
+  <div class="flex flex-col gap-3 w-full">
+    <span class="text-white font-semibold">👋 ${user.username}</span>
+    ${user.role === "admin" ? `<a href="/pages/admin.html" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ""}
+    <button id="logoutBtn" class="w-full px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
+  </div>
+`;
+    desktop.innerHTML = html;
+    mobile.innerHTML = html;
 
-      document.querySelectorAll('#logoutBtn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          await logout();
-          window.location.href = '/index.html';
-        });
+    document.querySelectorAll("#logoutBtn").forEach((btn) => {
+      btn.addEventListener("click", async () => {
+        await logout();
+        window.location.href = "/index.html";
       });
-    } else {
-      const html = `
+    });
+  } else {
+    const html = `
         <a href="/pages/login.html" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition shadow-md font-semibold">
           👤 Connexion
         </a>
       `;
-      desktop.innerHTML = html;
-      mobile.innerHTML = html;
-    }
-  };
+    desktop.innerHTML = html;
+    mobile.innerHTML = html;
+  }
+};
 
-  renderHeader();
+renderHeader();
