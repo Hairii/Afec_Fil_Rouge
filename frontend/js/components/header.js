@@ -59,22 +59,33 @@ const renderHeader = async () => {
   const user = await getUser();
 
   if (user && !user.message) {
-    const html = `
-  <div class="flex flex-col gap-3 w-full">
+    const desktopHtml = `
+  <div class="flex items-center gap-3">
     <span class="text-white font-semibold">👋 ${user.username}</span>
-    ${user.role === "admin" ? `<a href="/pages/admin.html" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ""}
-    <button id="logoutBtn" class="w-full px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
+    ${user.role === 'admin' ? `<a href="/pages/admin.html" class="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
+    <button id="logoutBtnDesktop" class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
   </div>
 `;
-    desktop.innerHTML = html;
-    mobile.innerHTML = html;
 
-    document.querySelectorAll("#logoutBtn").forEach((btn) => {
-      btn.addEventListener("click", async () => {
-        await logout();
-        window.location.href = "/index.html";
-      });
-    });
+const mobileHtml = `
+  <div class="flex flex-col gap-3 w-full">
+    <span class="text-white font-semibold">👋 ${user.username}</span>
+    ${user.role === 'admin' ? `<a href="/pages/admin.html" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
+    <button id="logoutBtnMobile" class="w-full px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
+  </div>
+`;
+
+desktop.innerHTML = desktopHtml;
+mobile.innerHTML = mobileHtml;
+
+    document.getElementById('logoutBtnDesktop')?.addEventListener('click', async () => {
+  await logout();
+  window.location.href = '/index.html';
+});
+document.getElementById('logoutBtnMobile')?.addEventListener('click', async () => {
+  await logout();
+  window.location.href = '/index.html';
+});
   } else {
     const html = `
         <a href="/pages/login.html" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition shadow-md font-semibold">
