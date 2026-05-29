@@ -1,0 +1,585 @@
+openapi: 3.0.3
+info:
+  title: GameFinder API
+  description: API de mon projet fil rouge GameFinder. Elle gère les jeux, les utilisateurs, les notes et les commentaires. Les admins ont accès à des routes supplémentaires pour modérer et gérer le contenu.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3000/api
+
+tags:
+  - name: Auth
+    description: Connexion, inscription et gestion de session
+  - name: Games
+    description: Accès au catalogue de jeux
+  - name: Genres
+    description: Liste des genres disponibles
+  - name: Comments
+    description: Commentaires sur les jeux
+  - name: Ratings
+    description: Notes des jeux
+  - name: Admin
+    description: Routes réservées aux admins
+
+paths:
+
+  # ===== AUTH =====
+  /auth/register:
+    post:
+      tags: [Auth]
+      summary: Créer un compte
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, mail, password, confirmPassword]
+              properties:
+                username:
+                  type: string
+                  minLength: 3
+                  maxLength: 20
+                  example: MonPseudo
+                mail:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  minLength: 8
+                  example: motdepasse123
+                confirmPassword:
+                  type: string
+                  example: motdepasse123
+      responses:
+        '200':
+          description: Compte créé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                message: user créé
+        '400':
+          description: Données invalides ou mail déjà utilisé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /auth/login:
+    post:
+      tags: [Auth]
+      summary: Se connecter — renvoie un access token (15min) et un refresh token (7j) dans des cookies httpOnly
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [mail, password]
+              properties:
+                mail:
+                  type: string
+                  format: email
+                  example: user@example.com
+                password:
+                  type: string
+                  example: motdepasse123
+      responses:
+        '200':
+          description: Connexion réussie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+              example:
+                message: Connexion réussie
+                userID: 1
+        '400':
+          description: Identifiants incorrects
+
+  /auth/logout:
+    post:
+      tags: [Auth]
+      summary: Se déconnecter — supprime les cookies
+      responses:
+        '200':
+          description: Déconnexion réussie
+
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      summary: Renouveler l'access token à partir du refresh token
+      responses:
+        '200':
+          description: Nouveau token généré
+        '401':
+          description: Refresh token manquant ou expiré
+
+  /auth/user:
+    get:
+      tags: [Auth]
+      summary: Récupérer les infos de l'utilisateur connecté
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Infos de l'utilisateur
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Non connecté
+
+  # ===== GAMES =====
+  /games:
+    get:
+      tags: [Games]
+      summary: Récupérer la liste des jeux avec pagination, recherche, tri et filtre par genre
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Numéro de page — 20 jeux par page
+        - in: query
+          name: search
+          schema:
+            type: string
+          description: Recherche par nom
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [name-asc, name-desc, rating-asc, rating-desc]
+          description: Tri
+        - in: query
+          name: genres
+          schema:
+            type: string
+          description: Les genres à filtrer, ex. Action,RPG
+      responses:
+        '200':
+          description: Liste des jeux
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  games:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Game'
+                  total:
+                    type: integer
+
+  /games/{id}:
+    get:
+      tags: [Games]
+      summary: Récupérer le détail d'un jeu
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Jeu trouvé
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+        '404':
+          description: Jeu introuvable
+
+  # ===== GENRES =====
+  /genres:
+    get:
+      tags: [Genres]
+      summary: Récupérer tous les genres
+      responses:
+        '200':
+          description: Liste des genres
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Genre'
+
+  # ===== COMMENTS =====
+  /comments/{game_id}:
+    get:
+      tags: [Comments]
+      summary: Récupérer les commentaires d'un jeu
+      parameters:
+        - in: path
+          name: game_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Liste des commentaires
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Comment'
+
+  /comments/add:
+    post:
+      tags: [Comments]
+      summary: Ajouter un commentaire sur un jeu (connecté)
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gameID, content]
+              properties:
+                gameID:
+                  type: integer
+                content:
+                  type: string
+      responses:
+        '201':
+          description: Commentaire ajouté
+        '401':
+          description: Non connecté
+
+  /comments/report/{id}:
+    patch:
+      tags: [Comments]
+      summary: Signaler un commentaire (connecté)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Commentaire signalé
+        '401':
+          description: Non connecté
+
+  /comments/delete/{id}:
+    delete:
+      tags: [Comments]
+      summary: Supprimer un commentaire (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Commentaire supprimé
+        '403':
+          description: Accès refusé
+
+  # ===== RATINGS =====
+  /ratings/{game_id}:
+    get:
+      tags: [Ratings]
+      summary: Récupérer la note moyenne d'un jeu et la note de l'utilisateur connecté si elle existe
+      parameters:
+        - in: path
+          name: game_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Moyenne des notes du jeu
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatingStats'
+
+  /ratings/add:
+    post:
+      tags: [Ratings]
+      summary: Noter un jeu (connecté) — crée la note ou la met à jour si elle existe déjà
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gameID, rating]
+              properties:
+                gameID:
+                  type: integer
+                rating:
+                  type: integer
+                  minimum: 1
+                  maximum: 5
+      responses:
+        '201':
+          description: Note enregistrée
+        '200':
+          description: Note mise à jour
+        '401':
+          description: Non connecté
+
+  # ===== ADMIN =====
+  /admin/games:
+    get:
+      tags: [Admin]
+      summary: Récupérer tous les jeux (admin)
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Liste complète des jeux
+        '403':
+          description: Accès refusé
+
+    post:
+      tags: [Admin]
+      summary: Ajouter un nouveau jeu (admin)
+      security:
+        - cookieAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameInput'
+      responses:
+        '201':
+          description: Jeu créé
+        '400':
+          description: Le nom est obligatoire
+
+  /admin/games/{id}:
+    patch:
+      tags: [Admin]
+      summary: Modifier un jeu (admin) — seuls les champs envoyés sont mis à jour
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GameInput'
+      responses:
+        '200':
+          description: Jeu mis à jour
+        '404':
+          description: Jeu introuvable
+
+    delete:
+      tags: [Admin]
+      summary: Supprimer un jeu (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Jeu supprimé
+        '404':
+          description: Jeu introuvable
+
+  /admin/comments:
+    get:
+      tags: [Admin]
+      summary: Récupérer les commentaires signalés (admin)
+      security:
+        - cookieAuth: []
+      responses:
+        '200':
+          description: Liste des commentaires signalés
+
+  /admin/comments/{id}:
+    patch:
+      tags: [Admin]
+      summary: Désignaler un commentaire (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Commentaire désignalé
+
+    delete:
+      tags: [Admin]
+      summary: Supprimer un commentaire signalé (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Commentaire supprimé
+
+  /admin/users/{id}:
+    delete:
+      tags: [Admin]
+      summary: Supprimer un utilisateur et toutes ses données (admin)
+      security:
+        - cookieAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Utilisateur supprimé
+
+components:
+  securitySchemes:
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: token
+
+  schemas:
+    Message:
+      type: object
+      properties:
+        message:
+          type: string
+
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        error:
+          type: string
+
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        username:
+          type: string
+        role:
+          type: string
+          enum: [membre, admin]
+
+    Game:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        released:
+          type: string
+          format: date
+        metacritic:
+          type: integer
+        esrb:
+          type: string
+        img:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+
+    GameInput:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        released:
+          type: string
+          format: date
+        metacritic:
+          type: integer
+          minimum: 0
+          maximum: 100
+        esrb_rating:
+          type: string
+        img:
+          type: string
+        genres:
+          type: array
+          items:
+            type: string
+
+    Genre:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+
+    Comment:
+      type: object
+      properties:
+        id:
+          type: integer
+        content:
+          type: string
+        username:
+          type: string
+        game_id:
+          type: integer
+        created_at:
+          type: string
+          format: date-time
+        reported:
+          type: boolean
+
+    RatingStats:
+      type: object
+      properties:
+        average_rating:
+          type: number
+          format: float
+        count:
+          type: integer
+        userRating:
+          type: integer
+          nullable: true
+          description: Note de l'utilisateur connecté, null si pas encore noté
