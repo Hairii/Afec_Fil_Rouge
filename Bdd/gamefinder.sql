@@ -674,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `ratings` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `game_id` (`game_id`)
-) ;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Déchargement des données de la table `ratings`
