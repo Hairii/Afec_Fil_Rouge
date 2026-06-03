@@ -28,7 +28,7 @@ npm install
 ```env
 PORT=3000
 DB_HOST=localhost
-DB_USER=root
+DB_USER=votre_user
 DB_PASSWORD=votre_mot_de_passe
 DB_NAME=gamefinder
 JWT_SECRET=votre_secret_jwt
