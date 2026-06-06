@@ -56,10 +56,12 @@ const renderComments = (comments) => {
       </p>
 
       <div class="flex gap-3 justify-end">
-        <button data-id="${comment.id}" class="unreport-btn px-4 py-1.5 bg-green-600 text-white rounded-xl hover:bg-green-500 transition text-xs font-semibold">
+        <button data-id="${comment.id}" class="unreport-btn px-4 py-1.5 bg-green-600 text-white rounded-xl hover:bg-green-500 transition text-xs font-semibold"
+          aria-label="Désignaler le commentaire de ${escapeHTML(comment.username || 'Anonyme')}">
           ✅ Désignaler
         </button>
-        <button data-id="${comment.id}" class="delete-btn px-4 py-1.5 bg-red-600 text-white rounded-xl hover:bg-red-500 transition text-xs font-semibold">
+        <button data-id="${comment.id}" class="delete-btn px-4 py-1.5 bg-red-600 text-white rounded-xl hover:bg-red-500 transition text-xs font-semibold"
+          aria-label="Supprimer le commentaire de ${escapeHTML(comment.username || 'Anonyme')}">
           🗑 Supprimer
         </button>
       </div>

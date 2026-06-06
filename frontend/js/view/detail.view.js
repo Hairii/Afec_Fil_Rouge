@@ -57,6 +57,8 @@ const renderRatingForm = (onStarClick, existingRating = null) => {
     const star = document.createElement('button');
     star.type = 'button';
     star.dataset.value = i;
+    star.setAttribute('aria-label', `Noter ${i} sur 5`);
+    star.setAttribute('aria-pressed', existingRating && i <= existingRating ? 'true' : 'false');
     star.textContent = existingRating && i <= existingRating ? '★' : '☆';
     star.className = `text-3xl transition star-btn cursor-pointer ${
       existingRating && i <= existingRating ? 'text-yellow-400' : 'text-gray-500 hover:text-yellow-400'
@@ -67,6 +69,7 @@ const renderRatingForm = (onStarClick, existingRating = null) => {
         s.textContent = v <= i ? '★' : '☆';
         s.classList.toggle('text-yellow-400', v <= i);
         s.classList.toggle('text-gray-500', v > i);
+        s.setAttribute('aria-pressed', v <= i ? 'true' : 'false');
       });
       label.textContent = `Note sélectionnée : ${i}/5`;
       onStarClick(i);
@@ -103,16 +106,14 @@ const renderComments = (comments, user, onDelete, onReport) => {
     const card = document.createElement('div');
     card.className = 'bg-gray-800/60 rounded-xl p-4 border border-gray-700/40 flex flex-col gap-2';
 
-
     const adminBtn = user?.role === 'admin'
-      ? `<button data-id="${comment.id}" class="delete-comment-btn text-red-500 hover:text-red-400 text-xs transition">Supprimer</button>`
+      ? `<button data-id="${comment.id}" class="delete-comment-btn text-red-500 hover:text-red-400 text-xs transition" aria-label="Supprimer le commentaire de ${escapeHTML(comment.username || 'Anonyme')}">Supprimer</button>`
       : '';
-
 
     const reportBtn = user && user.role !== 'admin'
       ? comment.reported
-        ? `<span class="text-orange-400 text-xs">🚩 Signalé</span>`
-        : `<button data-id="${comment.id}" class="report-btn text-gray-400 hover:text-orange-400 text-xs transition">🚩 Signaler</button>`
+        ? `<span class="text-orange-400 text-xs" aria-label="Commentaire déjà signalé">🚩 Signalé</span>`
+        : `<button data-id="${comment.id}" class="report-btn text-gray-400 hover:text-orange-400 text-xs transition" aria-label="Signaler le commentaire de ${escapeHTML(comment.username || 'Anonyme')}">🚩 Signaler</button>`
       : '';
 
     card.innerHTML = `

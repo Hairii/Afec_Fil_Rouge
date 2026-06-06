@@ -38,7 +38,7 @@
             <!-- Note moyenne -->
             <div class="mt-auto flex items-center gap-3">
               <div class="flex items-center gap-1">
-                <span class="text-yellow-400 text-2xl">&#9733;</span>
+                <span class="text-yellow-400 text-2xl" aria-hidden="true">&#9733;</span>
                 <span id="avgRating" class="text-white font-bold text-xl">--</span>
                 <span class="text-gray-400 text-sm">/5</span>
               </div>
@@ -54,12 +54,12 @@
             <a href="/pages/login.html" class="text-indigo-400 hover:underline">Connectez-vous</a> pour noter ce jeu.
           </div>
           <div id="ratingForm" class="hidden flex flex-col gap-4">
-            <div class="flex gap-2" id="starContainer">
+            <div class="flex gap-2" id="starContainer" role="group" aria-label="Choisir une note de 1 à 5 étoiles">
             </div>
-            <button id="submitRating" class="self-start px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-blue-500 transition font-semibold shadow-md">
+            <button id="submitRating" aria-label="Envoyer ma note" class="self-start px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-blue-500 transition font-semibold shadow-md">
               Envoyer ma note
             </button>
-            <p id="ratingMessage" class="text-sm mt-1"></p>
+            <p id="ratingMessage" class="text-sm mt-1" aria-live="polite"></p>
           </div>
         </div>
 
@@ -68,12 +68,14 @@
           <h2 class="text-xl font-bold text-white">Commentaires</h2>
 
           <div id="commentFormSection" class="hidden flex flex-col gap-3">
+            <label for="commentInput" class="sr-only">Votre commentaire</label>
             <textarea id="commentInput" rows="3" placeholder="Écrivez votre commentaire..."
+              aria-label="Votre commentaire"
               class="w-full bg-gray-800/80 border border-indigo-600/40 rounded-xl p-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"></textarea>
-            <button id="submitComment" class="self-start px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-blue-500 transition font-semibold shadow-md">
+            <button id="submitComment" aria-label="Publier le commentaire" class="self-start px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-blue-500 transition font-semibold shadow-md">
               Publier
             </button>
-            <p id="commentMessage" class="text-sm"></p>
+            <p id="commentMessage" class="text-sm" aria-live="polite"></p>
           </div>
 
 

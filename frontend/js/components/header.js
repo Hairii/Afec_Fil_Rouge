@@ -8,10 +8,10 @@ const html = `
         </a>
 
         <!-- Burger mobile -->
-        <button id="burgerBtn" class="md:hidden text-white text-3xl hover:text-indigo-400 transition">☰</button>
+        <button id="burgerBtn" aria-label="Ouvrir le menu de navigation" aria-expanded="false" aria-controls="mobileMenu" class="md:hidden text-white text-3xl hover:text-indigo-400 transition">☰</button>
 
         <!-- Desktop nav -->
-        <nav class="hidden md:flex gap-3 items-center">
+        <nav class="hidden md:flex gap-3 items-center" aria-label="Navigation principale">
           <a href="/pages/liste_jeux.html" class="px-6 py-2 bg-indigo-600 text-white rounded-full hover:bg-blue-500 transition shadow-md font-semibold">
             🎮 Liste des jeux
           </a>
@@ -21,7 +21,7 @@ const html = `
     </header>
 
     <!-- Menu mobile -->
-    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-gray-800 text-white shadow-2xl transform translate-x-full transition-transform duration-300 z-40 md:hidden">
+    <div id="mobileMenu" class="fixed top-0 right-0 h-full w-72 bg-gray-800 text-white shadow-2xl transform translate-x-full transition-transform duration-300 z-40 md:hidden" aria-label="Menu de navigation mobile" aria-hidden="true">
       <div class="p-6 flex flex-col gap-4 mt-20">
         <a href="/pages/liste_jeux.html" class="w-full text-center py-3 rounded-lg bg-indigo-600 hover:bg-indigo-500 transition">
           🎮 Liste des jeux
@@ -41,13 +41,20 @@ const mobileMenu = document.getElementById("mobileMenu");
 const overlay = document.getElementById("overlay");
 
 burgerBtn?.addEventListener("click", () => {
+  const isOpen = !mobileMenu.classList.contains("translate-x-full");
   mobileMenu.classList.toggle("translate-x-full");
+  mobileMenu.setAttribute("aria-hidden", isOpen ? "true" : "false");
   overlay.classList.toggle("hidden");
+  burgerBtn.setAttribute("aria-expanded", isOpen ? "false" : "true");
+  burgerBtn.setAttribute("aria-label", isOpen ? "Ouvrir le menu de navigation" : "Fermer le menu de navigation");
 });
 
 overlay?.addEventListener("click", () => {
   mobileMenu.classList.add("translate-x-full");
+  mobileMenu.setAttribute("aria-hidden", "true");
   overlay.classList.add("hidden");
+  burgerBtn?.setAttribute("aria-expanded", "false");
+  burgerBtn?.setAttribute("aria-label", "Ouvrir le menu de navigation");
 });
 
 // ====== HEADER DYNAMIQUE ======
@@ -63,7 +70,7 @@ const renderHeader = async () => {
   <div class="flex items-center gap-3">
     <span class="text-white font-semibold">👋 ${user.username}</span>
     ${user.role === 'admin' ? `<a href="/pages/admin.html" class="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
-    <button id="logoutBtnDesktop" class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
+    <button id="logoutBtnDesktop" aria-label="Se déconnecter" class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
   </div>
 `;
 
@@ -71,21 +78,21 @@ const mobileHtml = `
   <div class="flex flex-col gap-3 w-full">
     <span class="text-white font-semibold">👋 ${user.username}</span>
     ${user.role === 'admin' ? `<a href="/pages/admin.html" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
-    <button id="logoutBtnMobile" class="w-full px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
+    <button id="logoutBtnMobile" aria-label="Se déconnecter" class="w-full px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
   </div>
 `;
 
-desktop.innerHTML = desktopHtml;
-mobile.innerHTML = mobileHtml;
+    desktop.innerHTML = desktopHtml;
+    mobile.innerHTML = mobileHtml;
 
     document.getElementById('logoutBtnDesktop')?.addEventListener('click', async () => {
-  await logout();
-  window.location.href = '/index.html';
-});
-document.getElementById('logoutBtnMobile')?.addEventListener('click', async () => {
-  await logout();
-  window.location.href = '/index.html';
-});
+      await logout();
+      window.location.href = '/index.html';
+    });
+    document.getElementById('logoutBtnMobile')?.addEventListener('click', async () => {
+      await logout();
+      window.location.href = '/index.html';
+    });
   } else {
     const html = `
         <a href="/pages/login.html" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition shadow-md font-semibold">

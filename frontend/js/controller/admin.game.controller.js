@@ -60,6 +60,7 @@ const renderTable = (games) => {
       <td class="px-4 py-3">
         <img src="${game.img || '../public/image/placeholder.png'}"
              onerror="this.src='../public/image/placeholder.png'"
+             alt="${escapeHTML(game.name)}"
              class="w-14 h-10 object-cover rounded-lg" />
       </td>
       <td class="px-4 py-3 font-semibold text-white max-w-[180px] truncate">${escapeHTML(game.name)}</td>
@@ -69,8 +70,10 @@ const renderTable = (games) => {
       <td class="px-4 py-3">
         <div class="flex gap-2 justify-center">
           <button data-id="${game.id}" data-name="${escapeHTML(game.name)}" data-released="${game.released || ''}" data-metacritic="${game.metacritic || ''}" data-img="${game.img || ''}"
+            aria-label="Modifier ${escapeHTML(game.name)}"
             class="edit-btn px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-blue-500 transition text-xs">Modifier</button>
           <button data-id="${game.id}" data-name="${escapeHTML(game.name)}"
+            aria-label="Supprimer ${escapeHTML(game.name)}"
             class="delete-btn px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-500 transition text-xs">Supprimer</button>
         </div>
       </td>
