@@ -106,11 +106,16 @@ const renderComments = (comments, user, onDelete, onReport) => {
     const card = document.createElement('div');
     card.className = 'bg-gray-800/60 rounded-xl p-4 border border-gray-700/40 flex flex-col gap-2';
 
-    const adminBtn = user?.role === 'admin'
+    const isOwner = user && user.id === comment.user_id;
+    const isAdmin = user?.role === 'admin';
+
+    // btn supp : admin ou propriétaire
+    const deleteBtn = (isAdmin || isOwner)
       ? `<button data-id="${comment.id}" class="delete-comment-btn text-red-500 hover:text-red-400 text-xs transition" aria-label="Supprimer le commentaire de ${escapeHTML(comment.username || 'Anonyme')}">Supprimer</button>`
       : '';
 
-    const reportBtn = user && user.role !== 'admin'
+    // btn signalé
+    const reportBtn = user && !isAdmin && !isOwner
       ? comment.reported
         ? `<span class="text-orange-400 text-xs" aria-label="Commentaire déjà signalé">🚩 Signalé</span>`
         : `<button data-id="${comment.id}" class="report-btn text-gray-400 hover:text-orange-400 text-xs transition" aria-label="Signaler le commentaire de ${escapeHTML(comment.username || 'Anonyme')}">🚩 Signaler</button>`
@@ -124,17 +129,17 @@ const renderComments = (comments, user, onDelete, onReport) => {
         </div>
         <div class="flex items-center gap-2">
           ${reportBtn}
-          ${adminBtn}
+          ${deleteBtn}
         </div>
       </div>
       <p class="text-gray-200 text-sm leading-relaxed">${escapeHTML(comment.content)}</p>
     `;
 
-    if (user?.role === 'admin') {
+    if (isAdmin || isOwner) {
       card.querySelector('.delete-comment-btn')?.addEventListener('click', () => onDelete(comment.id));
     }
 
-    if (user && user.role !== 'admin' && !comment.reported) {
+    if (user && !isAdmin && !isOwner && !comment.reported) {
       card.querySelector('.report-btn')?.addEventListener('click', () => onReport(comment.id));
     }
 

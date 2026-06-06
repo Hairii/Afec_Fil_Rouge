@@ -31,6 +31,16 @@ export const deleteComments = async (id) => {
   }
 };
 
+export const getCommentById = async (id) => {
+  try {
+    const [rows] = await db.query("SELECT * FROM comments WHERE id = ?", [id]);
+    return rows[0] || null;
+  } catch (error) {
+    console.error("erreur server (getCommentById)", error.message);
+    throw error;
+  }
+};
+
 export const getCommentsByGame = async (game_id) => {
   try {
     const [comments] = await db.query(
