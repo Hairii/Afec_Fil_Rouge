@@ -15,7 +15,7 @@ export const renderGames = (container, games) => {
       bg-gray-900/50 border border-indigo-600/40 rounded-xl overflow-hidden
       w-64 shadow-lg transform transition duration-300
       hover:scale-105 hover:shadow-[0_0_25px_rgba(99,102,241,0.7)]
-      focus:outline-none focus:ring-2 focus:ring-indigo-400
+      focus:outline-none focus:ring-2 focus:ring-white
     `;
     card.innerHTML = `
       <div class="w-full h-40">
