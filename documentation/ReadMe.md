@@ -30,7 +30,7 @@ npm install
 
 3. Configurez les variables d'environnement — créez un fichier `.env` dans `/backend` :
 ```env
-PORT=3000 ou autre
+PORT=3000
 DB_HOST=localhost
 DB_USER=votre_user
 DB_PASSWORD=votre_mot_de_passe
@@ -42,9 +42,7 @@ NODE_ENV=development
 ```
 
 4. Importez la base de données :
-```bash
-mysql -u root -p gamefinder < bdd/gamefinder.sql
-```
+Ouvrez MySQL Workbench (ou phpMyAdmin) et import gamefinder.sql
 
 5. Lancez le serveur depuis le dossier backend :
 ```bash
@@ -52,7 +50,7 @@ cd backend
 npm run dev
 ```
 
-6. Ouvrez le navigateur sur `http://localhost:3000 `ou le port qui est dans le .env
+6. Ouvrez le navigateur sur `http://localhost:3000 `
 
 ## Technologies utilisées
 

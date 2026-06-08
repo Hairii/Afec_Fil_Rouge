@@ -20,7 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de données : `gamefinder`
 --
-CREATE DATABASE IF NOT EXISTS `gamefinder` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS `gamefinder` DEFAULT CHARACTER SET utf8mb4;
 USE `gamefinder`;
 
 -- --------------------------------------------------------
@@ -40,7 +40,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `game_id` (`game_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `comments`
@@ -65,7 +65,7 @@ CREATE TABLE IF NOT EXISTS `games` (
   `esrb_rating` varchar(50) DEFAULT NULL,
   `img` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=356715 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=356715 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `games`
@@ -249,7 +249,7 @@ CREATE TABLE IF NOT EXISTS `game_genres` (
   `genre_id` int NOT NULL,
   PRIMARY KEY (`game_id`,`genre_id`),
   KEY `genre_id` (`genre_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `game_genres`
@@ -631,7 +631,7 @@ CREATE TABLE IF NOT EXISTS `genres` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=84 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `genres`
@@ -674,7 +674,7 @@ CREATE TABLE IF NOT EXISTS `ratings` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `game_id` (`game_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `ratings`
@@ -697,7 +697,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `password` varchar(255) NOT NULL,
   `role` enum('visiteur','membre','admin') DEFAULT 'visiteur',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 
 --
 -- Déchargement des données de la table `users`
