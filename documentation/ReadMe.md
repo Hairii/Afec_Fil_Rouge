@@ -152,6 +152,8 @@ Afec_Fil_Rouge/
 │       │   ├── detail.controller.js
 │       │   ├── index.controller.js
 │       │   ├── liste.controller.js
+│       │   ├── mentions_legales.html
+│       │   ├── politique_confidentialite.html
 │       │   └── login.controller.js
 │       └── view/
 │           ├── detail.view.js
