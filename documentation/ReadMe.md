@@ -46,6 +46,10 @@ Ouvrez MySQL Workbench (ou phpMyAdmin) et import gamefinder.sql
 
 5. Lancez le serveur depuis le dossier backend :
 ```bash
+cd frontend
+npm run dev
+```
+```bash
 cd backend
 npm run dev
 ```
