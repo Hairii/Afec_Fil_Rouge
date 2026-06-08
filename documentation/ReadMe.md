@@ -15,7 +15,7 @@ Les administrateurs disposent d'un tableau de bord de gestion.
 1. Clonez le dépôt :
 ```bash
 git clone https://github.com/Hairii/Afec_Fil_Rouge.git
-cd gamefinder
+cd Afec_Fil_Rouge
 ```
 
 2. Installez les dépendances backend et frontend :
