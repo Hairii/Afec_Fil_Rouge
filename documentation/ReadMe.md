@@ -18,15 +18,19 @@ git clone https://github.com/Hairii/Afec_Fil_Rouge.git
 cd gamefinder
 ```
 
-2. Installez les dépendances backend :
+2. Installez les dépendances backend et frontend :
 ```bash
 cd backend
+npm install
+```
+```bash
+cd frontend
 npm install
 ```
 
 3. Configurez les variables d'environnement — créez un fichier `.env` dans `/backend` :
 ```env
-PORT=3000
+PORT=3000 ou autre
 DB_HOST=localhost
 DB_USER=votre_user
 DB_PASSWORD=votre_mot_de_passe
@@ -42,12 +46,13 @@ NODE_ENV=development
 mysql -u root -p gamefinder < bdd/gamefinder.sql
 ```
 
-5. Lancez le serveur :
+5. Lancez le serveur depuis le dossier backend :
 ```bash
+cd backend
 npm run dev
 ```
 
-6. Ouvrez le navigateur sur `http://localhost:3000`
+6. Ouvrez le navigateur sur `http://localhost:3000 `ou le port qui est dans le .env
 
 ## Technologies utilisées
 
