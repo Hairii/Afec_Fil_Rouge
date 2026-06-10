@@ -1,6 +1,6 @@
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
-import { createUser, getUserByMail } from "../models/auth.model.js";
+import { createUser, getUserByMail, softDeleteUser } from "../models/auth.model.js";
 import { registerSchema, loginSchema } from "../validations/auth.validation.js";
 
 const generateAccessToken = (user) =>
@@ -9,7 +9,7 @@ const generateAccessToken = (user) =>
     process.env.JWT_SECRET,
     { expiresIn: "15m" }
   );
-//register user
+
 const generateRefreshToken = (user) =>
   jwt.sign(
     { id: user.id, mail: user.mail, username: user.username, role: user.role },
@@ -24,7 +24,6 @@ const cookieOptions = (maxAge) => ({
   secure: process.env.NODE_ENV === "production",
   maxAge,
 });
-
 
 export const register = async (req, res) => {
   try {
@@ -54,14 +53,17 @@ export const login = async (req, res) => {
     const user = await getUserByMail(mail);
     if (!user) return res.status(400).json({ message: "identifiant invalide" });
 
+    // Bloquer la connexion si compte supprimé (soft delete)
+    if (user.is_deleted) return res.status(400).json({ message: "identifiant invalide" });
+
     const validPassword = await argon2.verify(user.password, password);
     if (!validPassword) return res.status(400).json({ message: "identifiant invalide" });
 
     const accessToken = generateAccessToken(user);
     const refreshToken = generateRefreshToken(user);
 
-    res.cookie("token", accessToken, cookieOptions(15 * 60 * 1000));           // 15min
-    res.cookie("refreshToken", refreshToken, cookieOptions(7 * 24 * 60 * 60 * 1000)); // 7j
+    res.cookie("token", accessToken, cookieOptions(15 * 60 * 1000));
+    res.cookie("refreshToken", refreshToken, cookieOptions(7 * 24 * 60 * 60 * 1000));
 
     res.json({ message: "Connexion réussie", userID: user.id });
   } catch (error) {
@@ -70,7 +72,6 @@ export const login = async (req, res) => {
   }
 };
 
-// recréer accesToken 
 export const refresh = async (req, res) => {
   try {
     const accessToken = generateAccessToken(req.user);
@@ -89,11 +90,27 @@ export const logout = (req, res) => {
   res.json({ message: "Deconnexion réussie" });
 };
 
-//pour avoir les infos de l'utilisateur via le cookie/token
 export const user = (req, res) => {
   res.json({
     id: req.user.id,
     username: req.user.username,
     role: req.user.role,
   });
+};
+
+// Soft delete RGPD
+export const deleteAccount = async (req, res) => {
+  try {
+    const userID = req.user.id;
+    await softDeleteUser(userID);
+
+    // Déconnexion immédiate
+    res.clearCookie("token", cookieOptions(0));
+    res.clearCookie("refreshToken", cookieOptions(0));
+
+    res.status(200).json({ message: "Compte supprimé" });
+  } catch (error) {
+    console.error("erreur deleteAccount", error.message);
+    res.status(500).json({ message: "server error(deleteAccount)" });
+  }
 };
