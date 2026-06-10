@@ -2,6 +2,7 @@ import express from 'express';
 import { addComments, getCommentByGame, removeComments, reportComment } from '../controllers/comments.controller.js';
 import { verifyToken, isAdmin } from '../middlewares/auth.middleware.js';
 
+
 const router = express.Router();
 
 router.post('/add', verifyToken, addComments);

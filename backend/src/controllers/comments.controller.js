@@ -1,4 +1,5 @@
 import { getComments, createComments, deleteComments, getCommentById, getCommentsByGame, reportCommentModel } from '../models/comments.model.js';
+import { commentSchema } from '../validations/comment.validation.js';
 
 export const getAllComments = async (req, res) => {
   try {
@@ -12,6 +13,8 @@ export const getAllComments = async (req, res) => {
 
 export const addComments = async (req, res) => {
   try {
+    const { error } = commentSchema.validate(req.body);
+if (error) return res.status(400).json({ error: error.details[0].message });
     const { content, gameID } = req.body;
     const userID = req.user.id;
     await createComments({ content, userID, gameID });
