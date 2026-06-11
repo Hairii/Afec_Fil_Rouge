@@ -71,10 +71,10 @@ const renderTable = (games) => {
         <div class="flex gap-2 justify-center">
           <button data-id="${game.id}" data-name="${escapeHTML(game.name)}" data-released="${game.released || ''}" data-metacritic="${game.metacritic || ''}" data-img="${game.img || ''}"
             aria-label="Modifier ${escapeHTML(game.name)}"
-            class="edit-btn px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-blue-500 transition text-xs">Modifier</button>
+            class="cursor-pointer edit-btn px-3 py-1 bg-indigo-600 text-white rounded-lg hover:bg-blue-500 transition text-xs">Modifier</button>
           <button data-id="${game.id}" data-name="${escapeHTML(game.name)}"
             aria-label="Supprimer ${escapeHTML(game.name)}"
-            class="delete-btn px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-500 transition text-xs">Supprimer</button>
+            class="cursor-pointer delete-btn px-3 py-1 bg-red-600 text-white rounded-lg hover:bg-red-500 transition text-xs">Supprimer</button>
         </div>
       </td>
     `;

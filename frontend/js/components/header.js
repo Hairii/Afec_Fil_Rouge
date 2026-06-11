@@ -1,4 +1,4 @@
-import { getUser, logout } from "../api/auth.api.js";
+import { getUser, logout, deleteAccount } from "../api/auth.api.js";
 
 const html = `
     <header class="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-b border-indigo-600/50 shadow-lg sticky top-0 z-50">
@@ -67,24 +67,33 @@ const renderHeader = async () => {
 
   if (user && !user.message) {
     const desktopHtml = `
-  <div class="flex items-center gap-3">
-    <span class="text-white font-semibold">👋 ${user.username}</span>
-    ${user.role === 'admin' ? `<a href="/pages/admin.html" class="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
-    <button id="logoutBtnDesktop" aria-label="Se déconnecter" class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
-  </div>
-`;
+      <div class="flex items-center gap-3">
+        <span class="text-white font-semibold">👋 ${user.username}</span>
+        ${user.role === 'admin' ? `<a href="/pages/admin.html" class="px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
+        <button id="logoutBtnDesktop" aria-label="Se déconnecter" class="px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
+        ${user.role !== 'admin' ? `
+        <button id="deleteAccountBtnDesktop" aria-label="Supprimer mon compte" class="ml-6 px-3 py-1 bg-transparent border border-gray-600 text-gray-400 rounded-full hover:border-red-500 hover:text-red-400 transition text-xs">
+          Supprimer le compte
+        </button>` : ''}
+      </div>
+    `;
 
-const mobileHtml = `
-  <div class="flex flex-col gap-3 w-full">
-    <span class="text-white font-semibold">👋 ${user.username}</span>
-    ${user.role === 'admin' ? `<a href="/pages/admin.html" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
-    <button id="logoutBtnMobile" aria-label="Se déconnecter" class="w-full px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
-  </div>
-`;
+    const mobileHtml = `
+      <div class="flex flex-col gap-3 w-full">
+        <span class="text-white font-semibold">👋 ${user.username}</span>
+        ${user.role === 'admin' ? `<a href="/pages/admin.html" class="w-full text-center px-4 py-2 bg-purple-600 text-white rounded-full hover:bg-purple-500 transition">Admin</a>` : ''}
+        <button id="logoutBtnMobile" aria-label="Se déconnecter" class="w-full px-4 py-2 bg-red-600 text-white rounded-full hover:bg-red-500 transition">Déconnexion</button>
+        ${user.role !== 'admin' ? `
+        <button id="deleteAccountBtnMobile" aria-label="Supprimer mon compte" class="w-full mt-2 px-3 py-1 bg-transparent border border-gray-600 text-gray-400 rounded-full hover:border-red-500 hover:text-red-400 transition text-xs">
+          Supprimer le compte
+        </button>` : ''}
+      </div>
+    `;
 
     desktop.innerHTML = desktopHtml;
     mobile.innerHTML = mobileHtml;
 
+    // Déconnexion
     document.getElementById('logoutBtnDesktop')?.addEventListener('click', async () => {
       await logout();
       window.location.href = '/index.html';
@@ -93,12 +102,31 @@ const mobileHtml = `
       await logout();
       window.location.href = '/index.html';
     });
+
+    // Suppression de compte
+    const handleDeleteAccount = async () => {
+      if (user.role === 'admin') {
+        alert('Un administrateur ne peut pas supprimer son compte.');
+        return;
+      }
+      if (!confirm('Supprimer votre compte ? Cette action est irréversible et vos données seront anonymisées.')) return;
+      const result = await deleteAccount();
+      if (result?.message === 'Compte supprimé') {
+        window.location.href = '/index.html';
+      } else {
+        alert(result?.message || 'Erreur lors de la suppression du compte.');
+      }
+    };
+
+    document.getElementById('deleteAccountBtnDesktop')?.addEventListener('click', handleDeleteAccount);
+    document.getElementById('deleteAccountBtnMobile')?.addEventListener('click', handleDeleteAccount);
+
   } else {
     const html = `
-        <a href="/pages/login.html" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition shadow-md font-semibold">
-          👤 Connexion
-        </a>
-      `;
+      <a href="/pages/login.html" class="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-500 transition shadow-md font-semibold">
+        👤 Connexion
+      </a>
+    `;
     desktop.innerHTML = html;
     mobile.innerHTML = html;
   }

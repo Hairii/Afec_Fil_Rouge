@@ -42,7 +42,6 @@ const logout = async () => {
 
 const getUser = async () => {
   try {
-    // si le token est expiré il le recréer
     const response = await fetchWithRefresh('/api/auth/user');
     if (!response.ok) return null;
     return await response.json();
@@ -51,4 +50,15 @@ const getUser = async () => {
   }
 };
 
-export { login, register, logout, getUser };
+const deleteAccount = async () => {
+  try {
+    const response = await fetchWithRefresh('/api/auth/delete', {
+      method: 'DELETE',
+    });
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+export { login, register, logout, getUser, deleteAccount };
